@@ -32,7 +32,7 @@ public class MenuController {
     }
 
     @FXML
-    public void handleButtonClick() {
+    public void navigateToCiliegiePage() {
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(MenuController.class.getResource("CiliegiePage.fxml"));
             Parent root = fxmlLoader.load();
@@ -49,5 +49,57 @@ public class MenuController {
         }
     }
 
+    @FXML
+    public void navigateToDipendentiPage() {
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(MenuController.class.getResource("DipendentiPage.fxml"));
+            Parent root = fxmlLoader.load();
 
+
+            DipendentiController dipendentiController =fxmlLoader.getController();
+            dipendentiController.setStage(stage);
+
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+        }catch (Exception e){
+            System.out.println("Errore");
+        }
+    }
+
+    @FXML
+    public void navigateToCostiPage() {
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(MenuController.class.getResource("CostiPage.fxml"));
+            Parent root = fxmlLoader.load();
+
+
+            CostiController costiController =fxmlLoader.getController();
+            costiController.setStage(stage);
+
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+        }catch (Exception e){
+            System.out.println("Errore");
+        }
+    }
+
+    @FXML
+    public void navigateToInfoPage() {
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(MenuController.class.getResource("InfoPage.fxml"));
+            Parent root = fxmlLoader.load();
+
+
+            InfoController infoController =fxmlLoader.getController();
+            infoController.setStage(stage);
+
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+        }catch (Exception e){
+            System.out.println("Errore");
+        }
+    }
 }
