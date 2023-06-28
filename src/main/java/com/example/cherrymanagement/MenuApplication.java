@@ -19,6 +19,7 @@ public class MenuApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(MenuApplication.class.getResource("MenuPage.fxml"));
         Parent root= fxmlLoader.load();
         stage.getIcons().add(new Image("/image/cherryicon.jpg"));
+
         //Ottenere il controller dalla scena principale
         MenuController menuController = fxmlLoader.getController();
         menuController.setStage(stage);

@@ -28,10 +28,10 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#navigateToCiliegiePage" text="Ciliegie" />
-            <Button mnemonicParsing="false" onAction="#navigateToDipendentiPage" text="Dipendenti" GridPane.rowIndex="1" />
-            <Button mnemonicParsing="false" onAction="#navigateToCostiPage" text="Costi" GridPane.rowIndex="2" />
-            <Button mnemonicParsing="false" onAction="#navigateToInfoPage" text="Info" GridPane.rowIndex="3" />
+            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#navigateToCiliegiePage" prefHeight="26.0" prefWidth="139.0" text="Ciliegie" />
+            <Button mnemonicParsing="false" onAction="#navigateToDipendentiPage" prefHeight="26.0" prefWidth="152.0" text="Dipendenti" GridPane.rowIndex="1" />
+            <Button mnemonicParsing="false" onAction="#navigateToCostiPage" prefHeight="26.0" prefWidth="146.0" text="Costi" GridPane.rowIndex="2" />
+            <Button mnemonicParsing="false" onAction="#navigateToInfoPage" prefHeight="26.0" prefWidth="161.0" text="Info" GridPane.rowIndex="3" />
          </children>
       </GridPane>
       <Label layoutX="467.0" layoutY="473.0" prefHeight="17.0" prefWidth="167.0" text="Prod. by N. Costa &amp; S. Panella" />
