@@ -17,9 +17,7 @@ import java.util.Optional;
 
 public class CiliegieController {
     private Stage stage;
-
     private TableView<Ciliegia> ciliegiaTable;
-
     public void setStage(Stage stage) {
         this.stage = stage;
     }

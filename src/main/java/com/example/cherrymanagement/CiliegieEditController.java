@@ -9,14 +9,11 @@ import java.lang.reflect.Field;
 
 public class CiliegieEditController {
 
-    @FXML
-    private TextField qualitaField;
+    @FXML private TextField qualitaField;
     @FXML private TextField kgVendutiField;
     @FXML private TextField descrizioneField;
-
     @FXML private TextField prezzomedioField;
     @FXML private TextField ricavoField;
-
     Ciliegia ciliegia;
 
     @FXML
@@ -33,7 +30,7 @@ public class CiliegieEditController {
         kgVendutiField.textProperty().set(ciliegia.getKgVenduti());
         descrizioneField.textProperty().set(ciliegia.getDescrizione());
         prezzomedioField.textProperty().set(ciliegia.getPrezzomedio());
-        ricavoField.textProperty().set(String.valueOf(ciliegia.getPrezzomedio()));
+        ricavoField.textProperty().set(ciliegia.getRicavo());
     }
 
     public Ciliegia getCiliegia() {
@@ -43,4 +40,6 @@ public class CiliegieEditController {
     public void setCiliegia(Ciliegia ciliegia) {
         this.ciliegia = ciliegia;
     }
+
+
 }

@@ -7,11 +7,8 @@ import java.time.LocalDate;
 public class Ciliegia {
     private final StringProperty qualita;
     private final StringProperty kgVenduti;
-
     private final StringProperty descrizione;
-
     private final StringProperty prezzomedio;
-
     private final StringProperty ricavo;
 
 
