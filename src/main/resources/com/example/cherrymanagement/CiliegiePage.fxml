@@ -7,6 +7,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="535.0" prefWidth="743.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cherrymanagement.CiliegieController">
    <children>
@@ -24,13 +25,20 @@
             <TableColumn prefWidth="148.0" text="Ricavo" />
         </columns>
       </TableView>
-      <ButtonBar layoutX="553.0" layoutY="487.0" prefHeight="40.0" prefWidth="175.0">
+      <ButtonBar layoutX="464.0" layoutY="487.0" prefHeight="40.0" prefWidth="270.0">
         <buttons>
+            <Button mnemonicParsing="false" onAction="#handleNewCiliegia" text="Add" />
+          <Button mnemonicParsing="false" text="Edit" />
             <Button mnemonicParsing="false" text="Delete" />
-          <Button mnemonicParsing="false" text="Add" />
         </buttons>
       </ButtonBar>
-      <Label layoutX="14.0" layoutY="487.0" prefHeight="40.0" prefWidth="108.0" text="Totale Ricavi:" />
-      <Label layoutX="94.0" layoutY="498.0" text="Numero" />
+      <Label layoutX="14.0" layoutY="487.0" prefHeight="40.0" prefWidth="161.0" text="Totale Ricavi:">
+         <font>
+            <Font size="22.0" />
+         </font></Label>
+      <Label layoutX="150.0" layoutY="491.0" text="Numero">
+         <font>
+            <Font size="22.0" />
+         </font></Label>
    </children>
 </AnchorPane>
