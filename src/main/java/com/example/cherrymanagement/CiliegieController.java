@@ -7,7 +7,6 @@ import java.io.IOException;
 
 public class CiliegieController {
     public void example(){
-        System.out.println("Ciao");
-        System.out.println("Addio");
+
     }
 }
