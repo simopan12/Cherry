@@ -10,9 +10,12 @@ import javafx.stage.Stage;
 
 public class MenuController {
 
+    public Button btnCiliegie;
 
     public void handleButtonClick(ActionEvent actionEvent) {
         try{
+            Stage mainStage = (Stage) btnCiliegie.getScene().getWindow();
+            mainStage.close();
             FXMLLoader fxmlLoader = new FXMLLoader(MenuController.class.getResource("CiliegiePage.fxml"));
             Stage stageCiliegie = new Stage();
             stageCiliegie.show();
