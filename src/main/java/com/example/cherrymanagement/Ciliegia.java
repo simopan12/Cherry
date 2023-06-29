@@ -85,5 +85,7 @@ public class Ciliegia {
     public void setRicavo(String ricavo) {
         this.ricavo.set(ricavo);
     }
+
+
 }
 

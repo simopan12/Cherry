@@ -1,5 +1,6 @@
 package com.example.cherrymanagement;
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,7 +27,15 @@ public class CiliegieController {
     @FXML private TableColumn<Ciliegia,String> ricavoColumn;
 
 
+    @FXML public Label ricavoTotaleLabel=new Label();
 
+    public void showSumRicavi(TableColumn <Ciliegia,String>ricavoColumn) {
+        ObservableList<Ciliegia> items = ricavoColumn.getTableView().getItems();
+        ricavoTotaleLabel.textProperty().bind(Bindings.createStringBinding(() -> {
+            int totaleRicavi = items.stream().mapToInt(ciliegia -> Integer.parseInt(ciliegia.getRicavo())).sum();
+            return String.valueOf(totaleRicavi);
+        }));
+    }
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -41,11 +50,13 @@ public class CiliegieController {
 
         ciliegiaTable.setItems(getCiliegiaData());
         ciliegiaTable.getSelectionModel().selectedItemProperty();
+        showSumRicavi(ricavoColumn);
     }
 
     ObservableList<Ciliegia> getCiliegiaData(){
         ObservableList<Ciliegia> ciliegie = FXCollections.observableArrayList();
         ciliegie.add(new Ciliegia("Giorgia", "500","Pessima", "7","2000"));
+        showSumRicavi(ricavoColumn);
         return ciliegie;
     }
     @FXML
@@ -69,6 +80,7 @@ public class CiliegieController {
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
                 ciliegiaTable.getItems().add(controller.getCiliegia());
+                showSumRicavi(ricavoColumn);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -101,8 +113,11 @@ public class CiliegieController {
 
             // Show the dialog and wait until the user closes it
             Optional<ButtonType> clickedButton = dialog.showAndWait();
+
             if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
                 ciliegiaTable.getItems().set(selectedIndex, controller.getCiliegia());
+                showSumRicavi(ricavoColumn);
+
             }
 
         } catch (NoSuchElementException e) {
