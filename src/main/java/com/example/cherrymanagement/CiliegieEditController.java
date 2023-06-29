@@ -19,6 +19,7 @@ public class CiliegieEditController {
     @FXML private TextField ricavoField;
     Ciliegia ciliegia;
 
+
     @FXML
     public void initialize(){
         qualitaField.textProperty().addListener((observable, oldValue, newValue) -> ciliegia.qualitaProperty().set(newValue));
@@ -70,6 +71,8 @@ public class CiliegieEditController {
         alert.setHeaderText("Non puoi inserire delle lettere");
         alert.showAndWait();
     }
+
+
     void update() {
         qualitaField.textProperty().set(ciliegia.getQualita());
         kgVendutiField.textProperty().set(ciliegia.getKgVenduti());
@@ -78,10 +81,10 @@ public class CiliegieEditController {
         ricavoField.textProperty().set(ciliegia.getRicavo());
     }
 
+
     public Ciliegia getCiliegia() {
         return ciliegia;
     }
-
     public void setCiliegia(Ciliegia ciliegia) {
         this.ciliegia = ciliegia;
     }

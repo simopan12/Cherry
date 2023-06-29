@@ -15,9 +15,11 @@ import java.io.IOException;
 public class MenuController {
     private static Stage stage;
 
+
     public void setStage(Stage stage){
         this.stage=stage;
     }
+
 
     public static void navigateToMenuPage() {
         try {
@@ -30,6 +32,7 @@ public class MenuController {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     public void navigateToCiliegiePage() {
@@ -49,6 +52,7 @@ public class MenuController {
         }
     }
 
+
     @FXML
     public void navigateToDipendentiPage() {
         try{
@@ -67,6 +71,7 @@ public class MenuController {
         }
     }
 
+
     @FXML
     public void navigateToCostiPage() {
         try{
@@ -84,6 +89,7 @@ public class MenuController {
             System.out.println("Errore");
         }
     }
+
 
     @FXML
     public void navigateToInfoPage() {
