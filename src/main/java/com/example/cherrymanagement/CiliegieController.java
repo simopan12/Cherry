@@ -25,8 +25,6 @@ public class CiliegieController {
     @FXML private TableColumn<Ciliegia,String> descrizioneColumn;
     @FXML private TableColumn<Ciliegia,String> prezzomedioColumn;
     @FXML private TableColumn<Ciliegia,String> ricavoColumn;
-
-
     @FXML public Label ricavoTotaleLabel=new Label();
 
     public void showSumRicavi(TableColumn <Ciliegia,String>ricavoColumn) {
@@ -68,7 +66,7 @@ public class CiliegieController {
             CiliegieEditController controller = loader.getController();
 
             // Set an empty person into the controller
-            controller.setCiliegia(new Ciliegia("Qualita", "kg venduti" , "Descrizione" ,"€/kg","0"));
+            controller.setCiliegia(new Ciliegia("", "" , "" ,"",""));
 
             // Create the dialog
             Dialog<ButtonType> dialog = new Dialog<>();
@@ -79,8 +77,18 @@ public class CiliegieController {
             // Show the dialog and wait until the user closes it
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
-                ciliegiaTable.getItems().add(controller.getCiliegia());
-                showSumRicavi(ricavoColumn);
+                if(controller.getCiliegia().getQualita() != "" && controller.getCiliegia().getKgVenduti()!=""
+                && controller.getCiliegia().getDescrizione() != "" && controller.getCiliegia().getPrezzomedio()!= ""
+                && controller.getCiliegia().getRicavo()!="") {
+                    ciliegiaTable.getItems().add(controller.getCiliegia());
+                    showSumRicavi(ricavoColumn);
+                }else{
+                    Alert alert= new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Attenzione");
+                    alert.setHeaderText("Non puoi lasciare un campo vuoto");
+                    alert.showAndWait();
+                    handleNewCiliegia();
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,17 +115,33 @@ public class CiliegieController {
 
             // Create the dialog
             Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("Edit Person");
+            dialog.setTitle("Edit Qualita");
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.setDialogPane(view);
+
+            DialogPane dialogPane = dialog.getDialogPane();
+
+            Ciliegia selectedCiliegia = ciliegiaTable.getItems().get(selectedIndex);
+
+            TextField qualita= (TextField)dialogPane.lookup("#qualitaField");
+            qualita.setText(selectedCiliegia.getQualita());
 
             // Show the dialog and wait until the user closes it
             Optional<ButtonType> clickedButton = dialog.showAndWait();
 
             if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
-                ciliegiaTable.getItems().set(selectedIndex, controller.getCiliegia());
-                showSumRicavi(ricavoColumn);
-
+                if(controller.getCiliegia().getQualita() != "" && controller.getCiliegia().getKgVenduti()!=""
+                        && controller.getCiliegia().getDescrizione() != "" && controller.getCiliegia().getPrezzomedio()!= ""
+                        && controller.getCiliegia().getRicavo()!="") {
+                    ciliegiaTable.getItems().add(controller.getCiliegia());
+                    showSumRicavi(ricavoColumn);
+                }else{
+                    Alert alert= new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Attenzione");
+                    alert.setHeaderText("Non puoi lasciare un campo vuoto");
+                    alert.showAndWait();
+                    handleEditCiliegia();
+                }
             }
 
         } catch (NoSuchElementException e) {
@@ -131,18 +155,20 @@ public class CiliegieController {
     private void handleDeleteCiliegia() {
         try {
             int selectedIndex = selectedIndex();
-            showConfirmationAlert();
-            ciliegiaTable.getItems().remove(selectedIndex);
+            showConfirmationAlert(selectedIndex);
             showSumRicavi(ricavoColumn);
         } catch (NoSuchElementException e) {
             showNoCiliegiaSelectedAlert();
         }
     }
-    public void showConfirmationAlert(){
+    public void showConfirmationAlert(int index){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma");
         alert.setHeaderText("Sei sicuro di voler eliminare questa qualità?");
-        alert.showAndWait();
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            ciliegiaTable.getItems().remove(index);
+        }
     }
     void showNoCiliegiaSelectedAlert() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
