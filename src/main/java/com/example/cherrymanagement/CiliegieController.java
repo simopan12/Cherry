@@ -133,7 +133,7 @@ public class CiliegieController {
             int selectedIndex = selectedIndex();
             showConfirmationAlert();
             ciliegiaTable.getItems().remove(selectedIndex);
-
+            showSumRicavi(ricavoColumn);
         } catch (NoSuchElementException e) {
             showNoCiliegiaSelectedAlert();
         }
