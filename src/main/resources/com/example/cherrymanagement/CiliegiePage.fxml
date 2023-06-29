@@ -28,8 +28,8 @@
       <ButtonBar layoutX="464.0" layoutY="487.0" prefHeight="40.0" prefWidth="270.0">
         <buttons>
             <Button mnemonicParsing="false" onAction="#handleNewCiliegia" text="Add" />
-          <Button mnemonicParsing="false" text="Edit" />
-            <Button mnemonicParsing="false" text="Delete" />
+          <Button mnemonicParsing="false" onAction="#handleEditCiliegia" text="Edit" />
+            <Button mnemonicParsing="false" onAction="#handleDeleteCiliegia" text="Delete" />
         </buttons>
       </ButtonBar>
       <Label layoutX="14.0" layoutY="487.0" prefHeight="40.0" prefWidth="161.0" text="Totale Ricavi:">

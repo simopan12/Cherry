@@ -2,8 +2,6 @@ package com.example.cherrymanagement;
 
 import javafx.beans.property.*;
 
-import java.time.LocalDate;
-
 public class Ciliegia {
     private final StringProperty qualita;
     private final StringProperty kgVenduti;
@@ -18,6 +16,14 @@ public class Ciliegia {
         this.descrizione = new SimpleStringProperty(descrizione);
         this.prezzomedio = new SimpleStringProperty(prezzomedio);
         this.ricavo = new SimpleStringProperty(ricavo);
+    }
+
+    public Ciliegia(Ciliegia other){
+        this.qualita = new SimpleStringProperty(other.getQualita());
+        this.kgVenduti = new SimpleStringProperty(other.getKgVenduti());
+        this.descrizione = new SimpleStringProperty(other.getDescrizione());
+        this.prezzomedio = new SimpleStringProperty(other.getPrezzomedio());
+        this.ricavo = new SimpleStringProperty(other.getRicavo());
     }
 
     public String getQualita() {

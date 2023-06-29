@@ -1,5 +1,7 @@
 package com.example.cherrymanagement;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class CiliegieController {
@@ -29,6 +32,22 @@ public class CiliegieController {
         this.stage = stage;
     }
 
+    public void initialize(){
+        qualitaColumn.setCellValueFactory(new PropertyValueFactory<>("qualita"));
+        kgVendutiColumn.setCellValueFactory(new PropertyValueFactory<>("kgVenduti"));
+        descrizioneColumn.setCellValueFactory(new PropertyValueFactory<>("descrizione"));
+        prezzomedioColumn.setCellValueFactory(new PropertyValueFactory<>("prezzomedio"));
+        ricavoColumn.setCellValueFactory(new PropertyValueFactory<>("ricavo"));
+
+        ciliegiaTable.setItems(getCiliegiaData());
+        ciliegiaTable.getSelectionModel().selectedItemProperty();
+    }
+
+    ObservableList<Ciliegia> getCiliegiaData(){
+        ObservableList<Ciliegia> ciliegie = FXCollections.observableArrayList();
+        ciliegie.add(new Ciliegia("Giorgia", "500","Pessima", "7","2000"));
+        return ciliegie;
+    }
     @FXML
     public void handleNewCiliegia(){
         try {
@@ -55,6 +74,70 @@ public class CiliegieController {
             e.printStackTrace();
         }
     }
+    int selectedIndex() {
+        int selectedIndex = ciliegiaTable.getSelectionModel().getSelectedIndex();
+        if (selectedIndex < 0) {
+            throw new NoSuchElementException();
+        }
+        return selectedIndex;
+    }
+    @FXML
+    public void handleEditCiliegia() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("CiliegieEditView.fxml"));
+            DialogPane view = loader.load();
+            CiliegieEditController controller = loader.getController();
+
+            // Set the person into the controller.
+            int selectedIndex = selectedIndex();
+            controller.setCiliegia(new Ciliegia(ciliegiaTable.getItems().get(selectedIndex)));
+
+            // Create the dialog
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Edit Person");
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.setDialogPane(view);
+
+            // Show the dialog and wait until the user closes it
+            Optional<ButtonType> clickedButton = dialog.showAndWait();
+            if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                ciliegiaTable.getItems().set(selectedIndex, controller.getCiliegia());
+            }
+
+        } catch (NoSuchElementException e) {
+            showNoCiliegiaSelectedAlert();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleDeleteCiliegia() {
+        try {
+            int selectedIndex = selectedIndex();
+            showConfirmationAlert();
+            ciliegiaTable.getItems().remove(selectedIndex);
+
+        } catch (NoSuchElementException e) {
+            showNoCiliegiaSelectedAlert();
+        }
+    }
+    public void showConfirmationAlert(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Conferma");
+        alert.setHeaderText("Sei sicuro di voler eliminare questa qualità?");
+        alert.showAndWait();
+    }
+    void showNoCiliegiaSelectedAlert() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Nessuna selezione");
+        alert.setHeaderText("Nessuna qualità è stata selezionata");
+        alert.setContentText("Perfavore seleziona una qualità dalla tabella");
+        alert.showAndWait();
+    }
+
+
     @FXML
     private void goBack() {
         MenuController.navigateToMenuPage();
