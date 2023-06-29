@@ -27,6 +27,7 @@ public class CiliegieController {
     @FXML private TableColumn<Ciliegia,String> ricavoColumn;
     @FXML public Label ricavoTotaleLabel=new Label();
 
+
     public void showSumRicavi(TableColumn <Ciliegia,String>ricavoColumn) {
         ObservableList<Ciliegia> items = ricavoColumn.getTableView().getItems();
         ricavoTotaleLabel.textProperty().bind(Bindings.createStringBinding(() -> {
@@ -35,9 +36,11 @@ public class CiliegieController {
         }));
     }
 
+
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
 
     public void initialize(){
         qualitaColumn.setCellValueFactory(new PropertyValueFactory<>("qualita"));
@@ -51,12 +54,15 @@ public class CiliegieController {
         showSumRicavi(ricavoColumn);
     }
 
+
     ObservableList<Ciliegia> getCiliegiaData(){
         ObservableList<Ciliegia> ciliegie = FXCollections.observableArrayList();
         ciliegie.add(new Ciliegia("Giorgia", "500","Pessima", "7","2000"));
         showSumRicavi(ricavoColumn);
         return ciliegie;
     }
+
+
     @FXML
     public void handleNewCiliegia(){
         try {
@@ -94,6 +100,8 @@ public class CiliegieController {
             e.printStackTrace();
         }
     }
+
+
     int selectedIndex() {
         int selectedIndex = ciliegiaTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex < 0) {
@@ -101,6 +109,8 @@ public class CiliegieController {
         }
         return selectedIndex;
     }
+
+
     @FXML
     public void handleEditCiliegia() {
         try {
@@ -123,8 +133,16 @@ public class CiliegieController {
 
             Ciliegia selectedCiliegia = ciliegiaTable.getItems().get(selectedIndex);
 
-            TextField qualita= (TextField)dialogPane.lookup("#qualitaField");
+            TextField qualita = (TextField)dialogPane.lookup("#qualitaField");
             qualita.setText(selectedCiliegia.getQualita());
+            TextField kgVenduti = (TextField)dialogPane.lookup("#kgVendutiField");
+            kgVenduti.setText(selectedCiliegia.getKgVenduti());
+            TextField descrizione = (TextField)dialogPane.lookup("#descrizioneField");
+            descrizione.setText(selectedCiliegia.getDescrizione());
+            TextField prezzoMedio = (TextField)dialogPane.lookup("#prezzomedioField");
+            prezzoMedio.setText(selectedCiliegia.getPrezzomedio());
+            TextField ricavo = (TextField)dialogPane.lookup("#ricavoField");
+            ricavo.setText(selectedCiliegia.getRicavo());
 
             // Show the dialog and wait until the user closes it
             Optional<ButtonType> clickedButton = dialog.showAndWait();
@@ -133,6 +151,7 @@ public class CiliegieController {
                 if(controller.getCiliegia().getQualita() != "" && controller.getCiliegia().getKgVenduti()!=""
                         && controller.getCiliegia().getDescrizione() != "" && controller.getCiliegia().getPrezzomedio()!= ""
                         && controller.getCiliegia().getRicavo()!="") {
+                    ciliegiaTable.getItems().remove(selectedIndex);
                     ciliegiaTable.getItems().add(controller.getCiliegia());
                     showSumRicavi(ricavoColumn);
                 }else{
@@ -151,6 +170,7 @@ public class CiliegieController {
         }
     }
 
+
     @FXML
     private void handleDeleteCiliegia() {
         try {
@@ -161,6 +181,8 @@ public class CiliegieController {
             showNoCiliegiaSelectedAlert();
         }
     }
+
+
     public void showConfirmationAlert(int index){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma");
@@ -170,6 +192,8 @@ public class CiliegieController {
             ciliegiaTable.getItems().remove(index);
         }
     }
+
+
     void showNoCiliegiaSelectedAlert() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Nessuna selezione");
