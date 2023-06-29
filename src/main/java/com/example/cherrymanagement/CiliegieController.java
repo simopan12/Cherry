@@ -5,10 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -17,7 +15,16 @@ import java.util.Optional;
 
 public class CiliegieController {
     private Stage stage;
-    private TableView<Ciliegia> ciliegiaTable;
+    @FXML private TableView<Ciliegia> ciliegiaTable;
+    @FXML private TableColumn<Ciliegia,String> qualitaColumn;
+    @FXML private TableColumn<Ciliegia,String> kgVendutiColumn;
+    @FXML private TableColumn<Ciliegia,String> descrizioneColumn;
+    @FXML private TableColumn<Ciliegia,String> prezzomedioColumn;
+    @FXML private TableColumn<Ciliegia,String> ricavoColumn;
+
+
+
+
     public void setStage(Stage stage) {
         this.stage = stage;
     }

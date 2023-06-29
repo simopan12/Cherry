@@ -16,13 +16,13 @@
             <Button mnemonicParsing="false" onAction="#goBack" text="indietro" />
          </items>
       </ToolBar>
-      <TableView layoutY="38.0" prefHeight="443.0" prefWidth="743.0">
+      <TableView fx:id="ciliegiaTable" layoutY="38.0" prefHeight="443.0" prefWidth="743.0">
         <columns>
-          <TableColumn prefWidth="148.6" text="Qualità" />
-          <TableColumn prefWidth="148.6" text="Kg Venduti" />
-            <TableColumn prefWidth="148.6" text="Descrizione" />
-            <TableColumn prefWidth="148.6" text="Prezzo medio al Kg" />
-            <TableColumn prefWidth="148.0" text="Ricavo" />
+          <TableColumn fx:id="qualitaColumn" prefWidth="148.6" text="Qualità" />
+          <TableColumn fx:id="kgVendutiColumn" prefWidth="148.6" text="Kg Venduti" />
+            <TableColumn fx:id="descrizioneColumn" prefWidth="148.6" text="Descrizione" />
+            <TableColumn fx:id="prezzomedioColumn" prefWidth="148.6" text="Prezzo medio al Kg" />
+            <TableColumn fx:id="ricavoColumn" prefWidth="148.0" text="Ricavo" />
         </columns>
       </TableView>
       <ButtonBar layoutX="464.0" layoutY="487.0" prefHeight="40.0" prefWidth="270.0">
