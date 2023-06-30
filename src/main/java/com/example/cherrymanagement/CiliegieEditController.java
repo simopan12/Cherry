@@ -15,7 +15,7 @@ public class CiliegieEditController {
     @FXML private TextField qualitaField;
     @FXML private TextField kgVendutiField;
     @FXML private TextField descrizioneField;
-    @FXML private TextField prezzomedioField;
+    //@FXML private TextField prezzomedioField;
     @FXML private TextField ricavoField;
     Ciliegia ciliegia;
 
@@ -39,7 +39,7 @@ public class CiliegieEditController {
 
         descrizioneField.textProperty().addListener((observable, oldValue, newValue) -> ciliegia.descrizioneProperty().set(newValue));
 
-        prezzomedioField.textProperty().addListener((observable, oldValue, newValue) ->
+        /*prezzomedioField.textProperty().addListener((observable, oldValue, newValue) ->
         {
             boolean containsLetters = newValue.matches(".*[a-zA-Z].*");
             Platform.runLater(() -> {
@@ -50,7 +50,7 @@ public class CiliegieEditController {
                     ciliegia.prezzomedioProperty().set(newValue);
                 }
             });
-        });
+        });*/
 
         ricavoField.textProperty().addListener((observable, oldValue, newValue) -> {
             boolean containsLetters = newValue.matches(".*[a-zA-Z].*");
@@ -77,7 +77,7 @@ public class CiliegieEditController {
         qualitaField.textProperty().set(ciliegia.getQualita());
         kgVendutiField.textProperty().set(ciliegia.getKgVenduti());
         descrizioneField.textProperty().set(ciliegia.getDescrizione());
-        prezzomedioField.textProperty().set(ciliegia.getPrezzomedio());
+       // prezzomedioField.textProperty().set(ciliegia.getPrezzomedio());
         ricavoField.textProperty().set(ciliegia.getRicavo());
     }
 

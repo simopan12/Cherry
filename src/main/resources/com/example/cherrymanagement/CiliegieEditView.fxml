@@ -16,7 +16,6 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="89.33333333333334" minHeight="10.0" prefHeight="77.33333333333334" valignment="CENTER" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="83.0" minHeight="0.0" prefHeight="54.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
@@ -24,12 +23,10 @@
                   <TextField fx:id="qualitaField" GridPane.columnIndex="1" />
                   <Label text="Kg Venduti" GridPane.rowIndex="1" />
                   <Label alignment="TOP_LEFT" text="Descrizione" GridPane.rowIndex="2" />
-                  <Label text="Prezzo Medio al Kg" GridPane.rowIndex="3" />
-                  <Label text="Ricavo" GridPane.rowIndex="4" />
+                  <Label text="Ricavo" GridPane.rowIndex="3" />
                   <TextField fx:id="kgVendutiField" layoutX="110.0" layoutY="12.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="descrizioneField" accessibleRole="TEXT_AREA" layoutX="110.0" layoutY="12.0" prefHeight="59.0" prefWidth="122.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField fx:id="prezzomedioField" layoutX="110.0" layoutY="12.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <TextField fx:id="ricavoField" layoutX="110.0" layoutY="12.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="ricavoField" layoutX="110.0" layoutY="12.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                </children>
             </GridPane>
          </children></AnchorPane>
