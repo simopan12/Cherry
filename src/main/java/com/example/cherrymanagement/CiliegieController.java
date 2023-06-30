@@ -141,9 +141,9 @@ public class CiliegieController {
             Optional<ButtonType> clickedButton = dialog.showAndWait();
 
             if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
-                if(controller.getCiliegia().getQualita() != "" && controller.getCiliegia().getKgVenduti()!=""
-                        && controller.getCiliegia().getDescrizione() != "" && controller.getCiliegia().getRicavo()!="") {
-                    controller.getCiliegia().setPrezzomedio(calcoloPrezzoMedio(controller).toString());
+                if(!controller.getCiliegia().getQualita().equals("") && !controller.getCiliegia().getKgVenduti().equals("")
+                        && !controller.getCiliegia().getDescrizione().equals("") && !controller.getCiliegia().getRicavo().equals("")) {
+                    controller.getCiliegia().setPrezzomedio(calcoloPrezzoMedio(controller));
                     ciliegiaTable.getItems().remove(selectedIndex);
                     ciliegiaTable.getItems().add(controller.getCiliegia());
                     showSumRicavi(ricavoColumn);
