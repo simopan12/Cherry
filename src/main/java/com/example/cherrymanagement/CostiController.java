@@ -1,14 +1,197 @@
 package com.example.cherrymanagement;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class CostiController {
     private Stage stage;
 
+    @FXML private TableView<Costo> costoTable;
+    @FXML private TableColumn<Costo,String> idColumn;
+    @FXML private TableColumn<Costo,String> tipoColumn;
+    @FXML private TableColumn<Costo,Double> ammontareColumn;
+
+    @FXML public Label totaleCostiLabel = new Label();
+
+
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
+
+    public void showSumCosti(TableColumn <Costo,Double> ammontareColumn) {
+        ObservableList<Costo> items = ammontareColumn.getTableView().getItems();
+        DoubleBinding totaleSpeseBinding = Bindings.createDoubleBinding(() -> {
+            double totaleSpese = 0.0;
+            for (Costo costo : items) {
+                totaleSpese += costo.getAmmontare();
+            }
+            return totaleSpese;
+        }, items);
+        totaleCostiLabel.textProperty().bind(Bindings.format("%.2f", totaleSpeseBinding));
+    }
+
+
+    public void initialize(){
+
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tipoColumn.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        ammontareColumn.setCellValueFactory(new PropertyValueFactory<>("ammontare"));
+
+        costoTable.setItems(getCostoData());
+        costoTable.getSelectionModel().selectedItemProperty();
+        showSumCosti(ammontareColumn);
+    }
+
+
+    private ObservableList<Costo> getCostoData() {
+        ObservableList<Costo> costi = FXCollections.observableArrayList();
+        showSumCosti(ammontareColumn);
+        return costi;
+    }
+
+
+    int selectedIndex() {
+        int selectedIndex = costoTable.getSelectionModel().getSelectedIndex();
+        if (selectedIndex < 0) {
+            throw new NoSuchElementException();
+        }
+        return selectedIndex;
+    }
+
+
+    @FXML
+    public void handleNewCosto(){
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("CostiEditView.fxml"));
+            DialogPane view = loader.load();
+            CostiEditController controller = loader.getController();
+
+            // Set an empty person into the controller
+            controller.setCosto(new Costo("", "" , 0.0));
+
+            // Create the dialog
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Nuovo Costo");
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.setDialogPane(view);
+
+            // Show the dialog and wait until the user closes it
+            Optional<ButtonType> clickedButton = dialog.showAndWait();
+            if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                if(!controller.getCosto().getId().equals("")  && !controller.getCosto().getTipo().equals("")
+                        && controller.getCosto().getAmmontare()>0) {
+                    costoTable.getItems().add(controller.getCosto());
+                    showSumCosti(ammontareColumn);
+                }else{
+                    Alert alert= new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Attenzione");
+                    alert.setHeaderText("Non puoi lasciare un campo vuoto");
+                    alert.showAndWait();
+                    handleNewCosto();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    public void handleEditCosto() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("CostiEditView.fxml"));
+            DialogPane view = loader.load();
+            CostiEditController controller = loader.getController();
+
+            // Set the person into the controller.
+            int selectedIndex = selectedIndex();
+            controller.setCosto(new Costo(costoTable.getItems().get(selectedIndex)));
+
+            // Create the dialog
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Edit Costo");
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.setDialogPane(view);
+
+            DialogPane dialogPane = dialog.getDialogPane();
+
+            Costo selectedCosto = costoTable.getItems().get(selectedIndex);
+
+            TextField id = (TextField)dialogPane.lookup("#idField");
+            id.setText(selectedCosto.getId());
+            TextField tipo = (TextField)dialogPane.lookup("#tipoField");
+            tipo.setText(selectedCosto.getTipo());
+            TextField ammontare = (TextField)dialogPane.lookup("#ammontareField");
+            ammontare.setText(String.valueOf(selectedCosto.getAmmontare()));
+
+            // Show the dialog and wait until the user closes it
+            Optional<ButtonType> clickedButton = dialog.showAndWait();
+
+            if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                if(!controller.getCosto().getId().equals("") && !controller.getCosto().getTipo().equals("")
+                        && controller.getCosto().getAmmontare()>0) {
+                    costoTable.getItems().remove(selectedIndex);
+                    costoTable.getItems().add(controller.getCosto());
+                    showSumCosti(ammontareColumn);
+                }else{
+                    Alert alert= new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Attenzione");
+                    alert.setHeaderText("Non puoi lasciare un campo vuoto");
+                    alert.showAndWait();
+                    handleEditCosto();
+                }
+            }
+
+        } catch (NoSuchElementException e) {
+            showNoCostoSelectedAlert();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleDeleteCosto() {
+        try {
+            int selectedIndex = selectedIndex();
+            showConfirmationAlert(selectedIndex);
+            showSumCosti(ammontareColumn);
+        } catch (NoSuchElementException e) {
+            showNoCostoSelectedAlert();
+        }
+    }
+
+    public void showConfirmationAlert(int index){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Conferma");
+        alert.setHeaderText("Sei sicuro di voler eliminare questo costo?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            costoTable.getItems().remove(index);
+        }
+    }
+    void showNoCostoSelectedAlert() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Nessuna selezione");
+        alert.setHeaderText("Nessun costo è stato selezionato");
+        alert.setContentText("Perfavore seleziona un costo dalla tabella");
+        alert.showAndWait();
+    }
+
     @FXML
     private void goBack() {
         MenuController.navigateToMenuPage();

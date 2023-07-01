@@ -131,7 +131,7 @@ public class DipendentiController {
 
             // Create the dialog
             Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("Edit Qualita");
+            dialog.setTitle("Edit Dipendente");
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.setDialogPane(view);
 
