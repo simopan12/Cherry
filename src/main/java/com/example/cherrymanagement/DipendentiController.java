@@ -70,6 +70,14 @@ public class DipendentiController {
     }
 
 
+    int selectedIndex() {
+        int selectedIndex = dipendenteTable.getSelectionModel().getSelectedIndex();
+        if (selectedIndex < 0) {
+            throw new NoSuchElementException();
+        }
+        return selectedIndex;
+    }
+
     @FXML
     public void handleNewDipendente(){
         try {
@@ -107,14 +115,6 @@ public class DipendentiController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    int selectedIndex() {
-        int selectedIndex = dipendenteTable.getSelectionModel().getSelectedIndex();
-        if (selectedIndex < 0) {
-            throw new NoSuchElementException();
-        }
-        return selectedIndex;
     }
 
     @FXML
@@ -199,7 +199,6 @@ public class DipendentiController {
             dipendenteTable.getItems().remove(index);
         }
     }
-
     void showNoDipendenteSelectedAlert() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Nessuna selezione");
@@ -208,11 +207,9 @@ public class DipendentiController {
         alert.showAndWait();
     }
 
-
     public double calcoloStipendio(DipendentiEditController controller){
         return controller.getDipendente().getOre()*controller.getDipendente().getPaga();
     }
-
 
     @FXML
     private void goBack() {
