@@ -4,15 +4,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class SignInController {
 
-    @FXML private TextField username;
-    @FXML private TextField password;
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
 
     private static Stage stage;
 
@@ -21,23 +22,51 @@ public class SignInController {
         this.stage=stage;
     }
 
-    public static void navigateSignInPage() {
-        try {
-            FXMLLoader loader = new FXMLLoader(MenuController.class.getResource("SignInPage.fxml"));
-            Parent root = loader.load();
+/* tryToNavigateToMenuPage va messa come #onAction in scene builder sul tasto Accedi nella pagina di login
+    @FXML public void tryNavigateToMenuPage(){
+        String username = usernameField.getText();
+        String password = passwordField.getText();
 
-            Scene signInScene = new Scene(root);
-            stage.setScene(signInScene);
-        } catch (IOException e) {
-            e.printStackTrace();
+        // Effettua la connessione al database
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/nome_database", "username", "password")) {
+            // Query per verificare le credenziali di accesso
+            String query = "SELECT * FROM utenti WHERE username = ? AND password = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, username);
+            statement.setString(2, password);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                // Login riuscito
+                navigateToMenuPage();
+            } else {
+                // Login fallito
+                showLoginError("Credenziali non valide.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Errore di connessione al database: " + e.getMessage());
+            showLoginError("Errore di connessione al database.");
         }
+
+    }
+*/
+    private void showLoginError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Errore di login");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
-    @FXML
-    public static void navigateToMenuPage() {
+
+    public void navigateToMenuPage() {
         try {
-            FXMLLoader loader = new FXMLLoader(MenuController.class.getResource("MenuPage.fxml"));
-            Parent root = loader.load();
+            FXMLLoader fxmlLoader = new FXMLLoader(MenuController.class.getResource("MenuPage.fxml"));
+            Parent root = fxmlLoader.load();
+
+            MenuController menuController =fxmlLoader.getController();
+            menuController.setStage(stage);
 
             Scene menuScene = new Scene(root);
             stage.setScene(menuScene);
@@ -64,9 +93,5 @@ public class SignInController {
             System.out.println("Errore");
         }
     }
-
-
-
-
 
 }

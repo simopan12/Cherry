@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.PasswordField?>
 <AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cherrymanagement.SignInController">
    <children>
       <ImageView fitHeight="400.0" fitWidth="304.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
@@ -15,8 +16,8 @@
             <Image url="@cherrylogo.jpg" />
          </image>
       </ImageView>
-      <TextField fx:id="username" layoutX="371.0" layoutY="165.0" />
-      <TextField fx:id="password" layoutX="371.0" layoutY="217.0" />
+      <TextField fx:id="usernameField" layoutX="371.0" layoutY="165.0" />
+      <PasswordField fx:id="passwordField" layoutX="371.0" layoutY="217.0" />
       <Button layoutX="402.0" layoutY="267.0" mnemonicParsing="false" onAction="#navigateToMenuPage" prefHeight="25.0" prefWidth="88.0" text="Accedi" />
       <Button layoutX="402.0" layoutY="315.0" mnemonicParsing="false" onAction="#navigateToSignUpPage" prefHeight="25.0" prefWidth="88.0" text="Registrati" />
       <Label layoutX="368.0" layoutY="148.0" text="Username" />

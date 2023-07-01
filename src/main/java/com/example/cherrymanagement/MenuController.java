@@ -44,7 +44,7 @@ public class MenuController {
             Scene scene = new Scene(root);
             stage.setScene(scene);
         }catch (Exception e){
-            System.out.println("Errore");
+            System.out.println("Errore dfjkgdkjhgdgkjhdkh");
         }
     }
 
