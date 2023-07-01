@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 
 public class DipendentiEditController {
@@ -14,7 +15,7 @@ public class DipendentiEditController {
     @FXML private TextField mansioneField;
     @FXML private  TextField pagaField;
 
-    @FXML private Spinner<Integer> oreField;
+    @FXML private Spinner<Double> oreField;
 
 
     Dipendente dipendente;
@@ -22,47 +23,30 @@ public class DipendentiEditController {
 
     @FXML
     public void initialize(){
-        qualitaField.textProperty().addListener((observable, oldValue, newValue) -> ciliegia.qualitaProperty().set(newValue));
+        cfField.textProperty().addListener((observable, oldValue, newValue) -> dipendente.cfProperty().set(newValue));
+        nomeField.textProperty().addListener((observable, oldValue, newValue) -> dipendente.nomeProperty().set(newValue));
 
-        kgVendutiField.textProperty().addListener((observable, oldValue, newValue) ->
+        cognomeField.textProperty().addListener((observable, oldValue, newValue) -> dipendente.cognomeProperty().set(newValue));
+
+        mansioneField.textProperty().addListener((observable, oldValue, newValue) -> dipendente.cfProperty().set(newValue));
+
+
+
+        pagaField.textProperty().addListener((observable, oldValue, newValue) ->
         {
             boolean containsLetters = newValue.matches(".*[a-zA-Z].*");
             Platform.runLater(() -> {
                 if (containsLetters) {
                     showAlert();
-                    kgVendutiField.textProperty().set("0");
+                    pagaField.textProperty().set("0");
                 } else {
-                    ciliegia.kgVendutiProperty().set(newValue);
+                    dipendente.pagaProperty().set(Double.parseDouble(newValue));
                 }
             });
         });
+        oreField.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 12, 0, 1));
+        oreField.valueProperty().addListener((observable,oldValue,newValue) -> dipendente.setOre(newValue.doubleValue()));
 
-        descrizioneField.textProperty().addListener((observable, oldValue, newValue) -> ciliegia.descrizioneProperty().set(newValue));
-
-        /*prezzomedioField.textProperty().addListener((observable, oldValue, newValue) ->
-        {
-            boolean containsLetters = newValue.matches(".*[a-zA-Z].*");
-            Platform.runLater(() -> {
-                if (containsLetters) {
-                    showAlert();
-                    prezzomedioField.textProperty().set("0");
-                } else {
-                    ciliegia.prezzomedioProperty().set(newValue);
-                }
-            });
-        });*/
-
-        ricavoField.textProperty().addListener((observable, oldValue, newValue) -> {
-            boolean containsLetters = newValue.matches(".*[a-zA-Z].*");
-            Platform.runLater(() -> {
-                if (containsLetters) {
-                    showAlert();
-                    ricavoField.textProperty().set("0");
-                } else {
-                    ciliegia.ricavoProperty().set(newValue);
-                }
-            });
-        });
     }
 
     public void showAlert(){
@@ -74,18 +58,18 @@ public class DipendentiEditController {
 
 
     void update() {
-        qualitaField.textProperty().set(ciliegia.getQualita());
-        kgVendutiField.textProperty().set(ciliegia.getKgVenduti());
-        descrizioneField.textProperty().set(ciliegia.getDescrizione());
-        // prezzomedioField.textProperty().set(ciliegia.getPrezzomedio());
-        ricavoField.textProperty().set(ciliegia.getRicavo());
+        cfField.textProperty().set(dipendente.getCf());
+        nomeField.textProperty().set(dipendente.getNome());
+        cognomeField.textProperty().set(dipendente.getCognome());
+        mansioneField.textProperty().set(dipendente.getMansione());
+        pagaField.textProperty().set(String.valueOf(dipendente.getPaga()));
     }
 
 
-    public Ciliegia getCiliegia() {
-        return ciliegia;
+    public Dipendente getDipendente() {
+        return dipendente;
     }
-    public void setCiliegia(Ciliegia ciliegia) {
-        this.ciliegia = ciliegia;
+    public void setDipendente(Dipendente dipendente) {
+        this.dipendente =dipendente;
     }
 }

@@ -5,14 +5,16 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.DoubleSummaryStatistics;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class DipendentiController {
     private Stage stage;
@@ -67,6 +69,45 @@ public class DipendentiController {
         return dipendenti;
     }
 
+    @FXML
+    public void handleNewDipendente(){
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("DipendentiEditView.fxml"));
+            DialogPane view = loader.load();
+            DipendentiEditController controller = loader.getController();
+
+            // Set an empty person into the controller
+            controller.setDipendente(new Dipendente("", "" , "" ,"",1,0,0));
+
+            // Create the dialog
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Nuovo Dipendente");
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.setDialogPane(view);
+
+            // Show the dialog and wait until the user closes it
+            Optional<ButtonType> clickedButton = dialog.showAndWait();
+            if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                if(!controller.getDipendente().getCf().equals("")  && !controller.getDipendente().getNome().equals("")
+                      && !controller.getDipendente().getCognome().equals("") && !controller.getDipendente().getMansione().equals("")
+                && controller.getDipendente().getPaga()>0) {
+                    controller.getDipendente().setStipendio(calcoloStipendio(controller));
+                    dipendenteTable.getItems().add(controller.getDipendente());
+                    showSumSpese(stipendioColumn);
+                }else{
+                  Alert alert= new Alert(Alert.AlertType.WARNING);
+                   alert.setTitle("Attenzione");
+                  alert.setHeaderText("Non puoi lasciare un campo vuoto");
+                   alert.showAndWait();
+                   handleNewDipendente();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     int selectedIndex() {
         int selectedIndex = dipendenteTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex < 0) {
@@ -78,7 +119,7 @@ public class DipendentiController {
 
 
     public double calcoloStipendio(DipendentiEditController controller){
-        return 0;
+        return controller.getDipendente().getOre()*controller.getDipendente().getPaga();
     }
     @FXML
     private void goBack() {
