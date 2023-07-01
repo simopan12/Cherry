@@ -65,6 +65,7 @@ public class CiliegieEditController {
         });
     }
 
+
     public void showAlert(){
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Attenzione");
@@ -77,7 +78,6 @@ public class CiliegieEditController {
         qualitaField.textProperty().set(ciliegia.getQualita());
         kgVendutiField.textProperty().set(ciliegia.getKgVenduti());
         descrizioneField.textProperty().set(ciliegia.getDescrizione());
-       // prezzomedioField.textProperty().set(ciliegia.getPrezzomedio());
         ricavoField.textProperty().set(ciliegia.getRicavo());
     }
 
