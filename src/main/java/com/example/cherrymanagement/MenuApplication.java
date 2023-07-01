@@ -13,13 +13,13 @@ public class MenuApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(MenuApplication.class.getResource("MenuPage.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MenuApplication.class.getResource("SignInPage.fxml"));
         Parent root= fxmlLoader.load();
         stage.getIcons().add(new Image("/image/cherryicon.png"));
 
         //Ottenere il controller dalla scena principale
-        MenuController menuController = fxmlLoader.getController();
-        menuController.setStage(stage);
+        SignInController signInController = fxmlLoader.getController();
+        signInController.setStage(stage);
 
         //mostra la scena principale
         Scene scene= new Scene(root);
