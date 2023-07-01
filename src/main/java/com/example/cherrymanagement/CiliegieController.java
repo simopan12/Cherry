@@ -25,6 +25,7 @@ public class CiliegieController {
     @FXML private TableColumn<Ciliegia,String> descrizioneColumn;
     @FXML private TableColumn<Ciliegia,String> prezzomedioColumn;
     @FXML private TableColumn<Ciliegia,String> ricavoColumn;
+
     @FXML public Label ricavoTotaleLabel=new Label();
 
     public void showSumRicavi(TableColumn <Ciliegia,String>ricavoColumn) {
