@@ -1,14 +1,9 @@
 package com.example.cherrymanagement;
 
 import javafx.application.Platform;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-
-import java.io.IOException;
-import java.lang.reflect.Field;
 
 public class CiliegieEditController {
 
