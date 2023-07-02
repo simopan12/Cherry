@@ -35,7 +35,7 @@ public class MenuApplication extends Application {
 
 
     public static void main(String[] args) throws SQLException {
-        database =new Database("jdbc:sqlserver://localhost:1433;database=CherryManagementDB","sa","Samupan12!");
+        database =new Database("jdbc:sqlserver://localhost:1433;database=CherryManagementDB","sa","Nicolo23.");
         launch();
     }
 
