@@ -26,7 +26,7 @@ public class Database {
         this.url = url;
         this.username = username;
         this.password = password;
-        this.connection=null;
+        this.connection = null;
         connect();
     }
     private void checkConnection() {
@@ -113,7 +113,7 @@ public class Database {
 
             if (resultSet.next()) {
                 // Login riuscito
-                navigateToMenuPage();
+                MenuController.navigateToMenuPage();
             } else {
                 // Login fallito
                 showLoginError("Credenziali non valide.");
@@ -124,12 +124,12 @@ public class Database {
         }
     }
 
-    public void navigateToMenuPage() {
+   /* public void navigateToMenuPage() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MenuController.class.getResource("MenuPage.fxml"));
             Parent root = fxmlLoader.load();
 
-            MenuController menuController =fxmlLoader.getController();
+            MenuController menuController = fxmlLoader.getController();
             menuController.setStage(MenuController.getStage());
 
             Scene menuScene = new Scene(root);
@@ -137,7 +137,7 @@ public class Database {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    } */
 
     private void showLoginError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -180,6 +180,8 @@ public class Database {
             System.out.println("Errore");
         }
     }
+
+
     private void showRegistrationError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Errore di registrazione");

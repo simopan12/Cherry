@@ -23,8 +23,11 @@ public class MenuController {
 
     public static void navigateToMenuPage() {
         try {
-            FXMLLoader loader = new FXMLLoader(MenuController.class.getResource("MenuPage.fxml"));
-            Parent root = loader.load();
+            FXMLLoader fxmlLoader = new FXMLLoader(MenuController.class.getResource("MenuPage.fxml"));
+            Parent root = fxmlLoader.load();
+
+            MenuController menuController = fxmlLoader.getController();
+            menuController.setStage(SignInController.getStage());
 
             Scene menuScene = new Scene(root);
             stage.setScene(menuScene);
