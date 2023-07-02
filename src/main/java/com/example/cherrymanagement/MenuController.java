@@ -9,6 +9,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MenuController {
+    public static Stage getStage() {
+        return stage;
+    }
+
     private static Stage stage;
 
 

@@ -4,13 +4,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
+
+
 
 public class Database {
     private String url;
@@ -95,6 +99,54 @@ public class Database {
             showRegistrationError("Errore di connessione al database.");
         }
     }
+
+    public void SignIn(TextField usernameField, PasswordField passwordField){
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+
+        // Effettua la connessione al database
+        try {
+            // Query per verificare le credenziali di accesso
+            String query = "SELECT * FROM Utenti WHERE Username = ? AND password = ?";
+
+            ResultSet resultSet = MenuApplication.getDatabase().executeQuery(query,username,password);
+
+            if (resultSet.next()) {
+                // Login riuscito
+                navigateToMenuPage();
+            } else {
+                // Login fallito
+                showLoginError("Credenziali non valide.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Errore di connessione al database: " + e.getMessage());
+            showLoginError("Errore di connessione al database.");
+        }
+    }
+
+    public void navigateToMenuPage() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(MenuController.class.getResource("MenuPage.fxml"));
+            Parent root = fxmlLoader.load();
+
+            MenuController menuController =fxmlLoader.getController();
+            menuController.setStage(MenuController.getStage());
+
+            Scene menuScene = new Scene(root);
+            MenuController.getStage().setScene(menuScene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showLoginError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Errore di login");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
     private boolean checkUserExists(Connection connection, String username) throws SQLException {
         String query = "SELECT * FROM Utenti WHERE Username = ?";

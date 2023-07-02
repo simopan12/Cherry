@@ -38,55 +38,8 @@ public class SignInController {
     }
 
     @FXML public void tryNavigateToMenuPage(){
-        String username = getUsernameField().getText();
-        String password = getPasswordField().getText();
-
-        // Effettua la connessione al database
-        try {
-            // Query per verificare le credenziali di accesso
-            String query = "SELECT * FROM utenti WHERE username = ? AND password = ?";
-
-            ResultSet resultSet = MenuApplication.getDatabase().executeQuery(query,username,password);
-
-            if (resultSet.next()) {
-                // Login riuscito
-                navigateToMenuPage();
-            } else {
-                // Login fallito
-                showLoginError("Credenziali non valide.");
-            }
-        } catch (SQLException e) {
-            System.out.println("Errore di connessione al database: " + e.getMessage());
-            showLoginError("Errore di connessione al database.");
-        }
-
+        MenuApplication.getDatabase().SignIn(getUsernameField(),getPasswordField());
     }
-
-    private void showLoginError(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Errore di login");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-
-    public void navigateToMenuPage() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(MenuController.class.getResource("MenuPage.fxml"));
-            Parent root = fxmlLoader.load();
-
-            MenuController menuController =fxmlLoader.getController();
-            menuController.setStage(stage);
-
-            Scene menuScene = new Scene(root);
-            stage.setScene(menuScene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     @FXML
     public void navigateToSignUpPage(){
         try{
