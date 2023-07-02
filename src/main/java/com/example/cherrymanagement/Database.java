@@ -1,4 +1,8 @@
 package com.example.cherrymanagement;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,7 +17,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
-
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Database {
@@ -21,6 +26,15 @@ public class Database {
     private String username;
     private String password;
     private Connection connection;
+    private String username_utente;
+
+    public String getUsername_utente() {
+        return username_utente;
+    }
+
+    public void setUsername_utente(String username_utente) {
+        this.username_utente = username_utente;
+    }
 
     public Database(String url, String username, String password) {
         this.url = url;
@@ -45,11 +59,13 @@ public class Database {
         }
     }
 
+
     public void disconnect() throws SQLException {
         if (connection != null && !connection.isClosed()) {
             connection.close();
         }
     }
+
 
     public ResultSet executeQuery(String query, Object... parameters) throws SQLException {
         checkConnection();
@@ -90,7 +106,7 @@ public class Database {
 
             // Esegui l'inserimento dell'utente nel database
             String query = "INSERT INTO Utenti (Username, Password, Nome_Utente, Cognome_Utente, Azienda) VALUES (?, ?, ?, ?, ?)";
-            int risultato = MenuApplication.getDatabase().executeUpdate(query,username,password,nomeUtente,cognomeUtente,azienda);
+            int risultato = executeUpdate(query,username,password,nomeUtente,cognomeUtente,azienda);
 
             // Registrazione riuscita
             showRegistrationSuccess();
@@ -109,9 +125,10 @@ public class Database {
             // Query per verificare le credenziali di accesso
             String query = "SELECT * FROM Utenti WHERE Username = ? AND password = ?";
 
-            ResultSet resultSet = MenuApplication.getDatabase().executeQuery(query,username,password);
+            ResultSet resultSet = executeQuery(query,username,password);
 
             if (resultSet.next()) {
+                setUsername_utente(username);
                 // Login riuscito
                 MenuController.navigateToMenuPage();
             } else {
@@ -124,20 +141,6 @@ public class Database {
         }
     }
 
-   /* public void navigateToMenuPage() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(MenuController.class.getResource("MenuPage.fxml"));
-            Parent root = fxmlLoader.load();
-
-            MenuController menuController = fxmlLoader.getController();
-            menuController.setStage(MenuController.getStage());
-
-            Scene menuScene = new Scene(root);
-            MenuController.getStage().setScene(menuScene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    } */
 
     private void showLoginError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -150,7 +153,7 @@ public class Database {
 
     private boolean checkUserExists(Connection connection, String username) throws SQLException {
         String query = "SELECT * FROM Utenti WHERE Username = ?";
-        ResultSet resultSet=MenuApplication.getDatabase().executeQuery(query,username);
+        ResultSet resultSet = executeQuery(query,username);
         return resultSet.next();
     }
 
@@ -188,5 +191,35 @@ public class Database {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+
+    public ObservableList<Ciliegia> getCiliegie(String uuid) {
+        checkConnection();
+        try {
+            final String query = "SELECT * FROM Ciliegie JOIN Utenti ON Ciliegie.Username_utente = Utenti.Username WHERE Ciliegie.Username_utente = ?";
+
+            //PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            ResultSet resultSet = executeQuery(query,uuid);
+
+            Ciliegia ciliegia = null;
+            List<Ciliegia> ciliegie = new ArrayList<>();
+
+            if (resultSet.next()) {
+                do {
+                    ciliegia = new Ciliegia(resultSet.getString("Qualità"),
+                            resultSet.getString("Kg_Venduti"),
+                            resultSet.getString("Descrizione"),
+                            resultSet.getString("Ricavo"));
+                    ciliegie.add(ciliegia);
+                } while (resultSet.next());
+            }
+
+            resultSet.close();
+            return FXCollections.observableList(ciliegie);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }

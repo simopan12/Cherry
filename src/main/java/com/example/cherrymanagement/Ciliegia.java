@@ -6,15 +6,15 @@ public class Ciliegia {
     private final StringProperty qualita;
     private final StringProperty kgVenduti;
     private final StringProperty descrizione;
-    private final StringProperty prezzomedio;
+    //private final StringProperty prezzomedio;
     private final StringProperty ricavo;
 
 
-    public Ciliegia(String qualita, String kgVenduti, String descrizione, String prezzomedio, String ricavo) {
+    public Ciliegia(String qualita, String kgVenduti, String descrizione, String ricavo) {
         this.qualita = new SimpleStringProperty(qualita);
         this.kgVenduti = new SimpleStringProperty(kgVenduti);
         this.descrizione = new SimpleStringProperty(descrizione);
-        this.prezzomedio = new SimpleStringProperty(prezzomedio);
+        //this.prezzomedio = new SimpleStringProperty(prezzomedio);
         this.ricavo = new SimpleStringProperty(ricavo);
     }
 
@@ -22,7 +22,7 @@ public class Ciliegia {
         this.qualita = new SimpleStringProperty(other.getQualita());
         this.kgVenduti = new SimpleStringProperty(other.getKgVenduti());
         this.descrizione = new SimpleStringProperty(other.getDescrizione());
-        this.prezzomedio = new SimpleStringProperty(other.getPrezzomedio());
+        //this.prezzomedio = new SimpleStringProperty(other.getPrezzomedio());
         this.ricavo = new SimpleStringProperty(other.getRicavo());
     }
 
@@ -63,16 +63,17 @@ public class Ciliegia {
     }
 
     public String getPrezzomedio() {
-        return prezzomedio.get();
+        Double pm = Double.parseDouble(getRicavo())/Double.parseDouble(getKgVenduti());
+        return String.format("%.2f",pm);
     }
 
-    public StringProperty prezzomedioProperty() {
+    /*public StringProperty prezzomedioProperty() {
         return prezzomedio;
-    }
+    }*/
 
-    public void setPrezzomedio(String prezzomedio) {
+   /* public void setPrezzomedio(String prezzomedio) {
         this.prezzomedio.set(prezzomedio);
-    }
+    }*/
 
     public String getRicavo() {
         return ricavo.get();
