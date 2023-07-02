@@ -24,10 +24,11 @@ public class CiliegieController {
 
     @FXML public Label ricavoTotaleLabel=new Label();
 
+
     public void showSumRicavi(TableColumn <Ciliegia,String>ricavoColumn) {
         ObservableList<Ciliegia> items = ricavoColumn.getTableView().getItems();
         ricavoTotaleLabel.textProperty().bind(Bindings.createStringBinding(() -> {
-            int totaleRicavi = items.stream().mapToInt(ciliegia -> Integer.parseInt(ciliegia.getRicavo())).sum();
+            double totaleRicavi = items.stream().mapToDouble(ciliegia -> Double.parseDouble(ciliegia.getRicavo())).sum();
             return String.valueOf(totaleRicavi);
         }));
     }
