@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
 
 public class SignUpController {
     @FXML
@@ -20,6 +21,28 @@ public class SignUpController {
     @FXML private TextField cognomeUtenteField;
     @FXML private TextField aziendaField;
 
+    public TextField getUsernameField() {
+        return usernameField;
+    }
+
+    public PasswordField getPasswordField() {
+        return passwordField;
+    }
+
+    public TextField getNomeUtenteField() {
+        return nomeUtenteField;
+    }
+
+    public TextField getCognomeUtenteField() {
+        return cognomeUtenteField;
+    }
+
+    public TextField getAziendaField() {
+        return aziendaField;
+    }
+
+
+
     private static Stage stage;
 
 
@@ -27,40 +50,10 @@ public class SignUpController {
         this.stage=stage;
     }
 
-/* questa va messa come #onAction sul pulsante Registrati nella pagina di registrazione
-    private void handleRegisterButtonAction() {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        String nomeUtente = nomeUtenteField.getText();
-        String cognomeUtente = cognomeUtenteField.getText();
-        String azienda = aziendaField.getText();
 
-        // Effettua la connessione al database
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/nome_database", "username", "password")) {
-            // Verifica se l'utente esiste già
-            if (checkUserExists(connection, username)) {
-                showRegistrationError("L'utente esiste già.");
-                return;
-            }
-
-            // Esegui l'inserimento dell'utente nel database
-            String insertQuery = "INSERT INTO utenti (username, password, nome, cognome, azienda) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(insertQuery);
-            statement.setString(1, username);
-            statement.setString(2, password);
-            statement.setString(3, nomeUtente);
-            statement.setString(4, cognomeUtente);
-            statement.setString(5, azienda);
-            statement.executeUpdate();
-
-            // Registrazione riuscita
-            showRegistrationSuccess();
-        } catch (SQLException e) {
-            System.out.println("Errore di connessione al database: " + e.getMessage());
-            showRegistrationError("Errore di connessione al database.");
-        }
+    @FXML private void handleRegisterButtonAction() {
+        MenuApplication.getDatabase().SignUp(getUsernameField(),getPasswordField(),getNomeUtenteField(),getCognomeUtenteField(),getAziendaField());
     }
-    */
 
     @FXML
     public void navigateToSignInPage(){
@@ -70,39 +63,16 @@ public class SignUpController {
 
 
             SignInController signInController =fxmlLoader.getController();
-            signInController.setStage(stage);
+            signInController.setStage(SignInController.getStage());
 
 
             Scene scene = new Scene(root);
-            stage.setScene(scene);
+            SignInController.getStage().setScene(scene);
         }catch (Exception e){
             System.out.println("Errore");
         }
     }
-    /*
-    private boolean checkUserExists(Connection connection, String username) throws SQLException {
-        String query = "SELECT * FROM utenti WHERE username = ?";
-        PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, username);
-        return statement.executeQuery().next();
-    }
 
-     */
 
-    private void showRegistrationSuccess() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Registrazione riuscita");
-        alert.setHeaderText(null);
-        alert.setContentText("La registrazione è avvenuta con successo. Effettua il login.");
-        alert.showAndWait();
 
-        navigateToSignInPage();
-    }
-    private void showRegistrationError(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Errore di registrazione");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }

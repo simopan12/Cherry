@@ -7,8 +7,14 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class MenuApplication extends Application {
+    private static Database database;
+
+    public static Database getDatabase() {
+        return database;
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -28,7 +34,8 @@ public class MenuApplication extends Application {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
+        database =new Database("jdbc:sqlserver://localhost:1433;database=CherryManagementDB","sa","Samupan12!");
         launch();
     }
 

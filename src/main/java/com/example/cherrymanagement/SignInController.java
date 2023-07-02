@@ -9,8 +9,23 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+
 
 public class SignInController {
+
+    public TextField getUsernameField() {
+        return usernameField;
+    }
+
+    public PasswordField getPasswordField() {
+        return passwordField;
+    }
+
+    public static Stage getStage() {
+        return stage;
+    }
 
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
@@ -22,20 +37,16 @@ public class SignInController {
         this.stage=stage;
     }
 
-/* tryToNavigateToMenuPage va messa come #onAction in scene builder sul tasto Accedi nella pagina di login
     @FXML public void tryNavigateToMenuPage(){
-        String username = usernameField.getText();
-        String password = passwordField.getText();
+        String username = getUsernameField().getText();
+        String password = getPasswordField().getText();
 
         // Effettua la connessione al database
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/nome_database", "username", "password")) {
+        try {
             // Query per verificare le credenziali di accesso
             String query = "SELECT * FROM utenti WHERE username = ? AND password = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, username);
-            statement.setString(2, password);
 
-            ResultSet resultSet = statement.executeQuery();
+            ResultSet resultSet = MenuApplication.getDatabase().executeQuery(query,username,password);
 
             if (resultSet.next()) {
                 // Login riuscito
@@ -50,7 +61,7 @@ public class SignInController {
         }
 
     }
-*/
+
     private void showLoginError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Errore di login");
