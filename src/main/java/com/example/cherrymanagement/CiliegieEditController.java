@@ -34,19 +34,6 @@ public class CiliegieEditController {
 
         descrizioneField.textProperty().addListener((observable, oldValue, newValue) -> ciliegia.descrizioneProperty().set(newValue));
 
-        /*prezzomedioField.textProperty().addListener((observable, oldValue, newValue) ->
-        {
-            boolean containsLetters = newValue.matches(".*[a-zA-Z].*");
-            Platform.runLater(() -> {
-                if (containsLetters) {
-                    showAlert();
-                    prezzomedioField.textProperty().set("0");
-                } else {
-                    ciliegia.prezzomedioProperty().set(newValue);
-                }
-            });
-        });*/
-
         ricavoField.textProperty().addListener((observable, oldValue, newValue) -> {
             boolean containsLetters = newValue.matches(".*[a-zA-Z].*");
             Platform.runLater(() -> {

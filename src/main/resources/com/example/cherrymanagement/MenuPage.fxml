@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="505.0" prefWidth="649.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cherrymanagement.MenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="505.0" prefWidth="649.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cherrymanagement.MenuController">
    <children>
-      <Region prefHeight="139.0" prefWidth="649.0" style="-fx-background-color: ff0000;" />
-      <Label alignment="CENTER" layoutY="4.0" prefHeight="139.0" prefWidth="649.0" text="MENU" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Label alignment="CENTER" layoutY="4.0" prefHeight="150.0" prefWidth="649.0" style="-fx-background-color: #ae1717;" text="Cherry Management" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <font>
-            <Font name="Bodoni MT Condensed" size="52.0" />
+            <Font name="Elephant" size="52.0" />
          </font>
       </Label>
       <GridPane alignment="CENTER" layoutX="255.0" layoutY="157.0" prefHeight="305.0" prefWidth="139.0">
@@ -23,12 +26,12 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#navigateToCiliegiePage" prefHeight="25.0" prefWidth="190.0" text="Ciliegie" />
-            <Button mnemonicParsing="false" onAction="#navigateToDipendentiPage" prefHeight="25.0" prefWidth="322.0" text="Dipendenti" GridPane.rowIndex="1" />
-            <Button mnemonicParsing="false" onAction="#navigateToCostiPage" prefHeight="25.0" prefWidth="494.0" text="Costi" GridPane.rowIndex="2" />
-            <Button mnemonicParsing="false" onAction="#navigateToInfoPage" prefHeight="25.0" prefWidth="465.0" text="Info" GridPane.rowIndex="3" />
+            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#navigateToCiliegiePage" prefHeight="25.0" prefWidth="190.0" style="-fx-background-color: #1bb94a;" text="Ciliegie" textFill="WHITE" />
+            <Button mnemonicParsing="false" onAction="#navigateToDipendentiPage" prefHeight="25.0" prefWidth="322.0" style="-fx-background-color: #1bb94a;" text="Dipendenti" textFill="WHITE" GridPane.rowIndex="1" />
+            <Button mnemonicParsing="false" onAction="#navigateToCostiPage" prefHeight="25.0" prefWidth="494.0" style="-fx-background-color: #1bb94a;" text="Costi" textFill="WHITE" GridPane.rowIndex="2" />
+            <Button mnemonicParsing="false" onAction="#navigateToInfoPage" prefHeight="25.0" prefWidth="465.0" style="-fx-background-color: #1bb94a;" text="Info" textFill="WHITE" GridPane.rowIndex="3" />
          </children>
       </GridPane>
-      <Label layoutX="467.0" layoutY="473.0" prefHeight="17.0" prefWidth="167.0" text="Prod. by N. Costa &amp; S. Panella" />
+      <Label layoutX="467.0" layoutY="473.0" prefHeight="17.0" prefWidth="167.0" text="Prod. by N. Costa &amp; S. Panella" textFill="WHITE" />
    </children>
 </AnchorPane>
