@@ -86,7 +86,7 @@ public class Database {
 
             // Esegui l'inserimento dell'utente nel database
             String query = "INSERT INTO Utenti (Username, Password, Nome_Utente, Cognome_Utente, Azienda) VALUES (?, ?, ?, ?, ?)";
-            ResultSet resultSet = MenuApplication.getDatabase().executeQuery(query,username,password,nomeUtente,cognomeUtente,azienda);
+            int risultato = MenuApplication.getDatabase().executeUpdate(query,username,password,nomeUtente,cognomeUtente,azienda);
 
             // Registrazione riuscita
             showRegistrationSuccess();
