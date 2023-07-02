@@ -36,7 +36,6 @@ public class MenuController {
         }
     }
 
-
     @FXML
     public void navigateToCiliegiePage() {
         try{

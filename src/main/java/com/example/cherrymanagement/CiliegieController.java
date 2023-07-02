@@ -50,6 +50,7 @@ public class CiliegieController {
         ricavoColumn.setCellValueFactory(new PropertyValueFactory<>("ricavo"));
 
         ciliegiaTable.setItems(getCiliegiaData());
+
         ciliegiaTable.getSelectionModel().selectedItemProperty();
         showSumRicavi(ricavoColumn);
     }
@@ -91,12 +92,12 @@ public class CiliegieController {
             if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
                 if(!controller.getCiliegia().getQualita().equals("")  && !controller.getCiliegia().getKgVenduti().equals("")
                 && !controller.getCiliegia().getDescrizione().equals("") && !controller.getCiliegia().getRicavo().equals("")) {
-                    //controller.getCiliegia().setPrezzomedio(calcoloPrezzoMedio(controller));
-                    MenuApplication.getDatabase().executeUpdate("INSERT INTO CILIEGIE(Qualità,Kg_Venduti,Descrizione,Prezzo_Medio,Ricavo,Username_utente) VALUES(?,?,?,?,?,?)",
+
+                    MenuApplication.getDatabase().executeUpdate("INSERT INTO CILIEGIE(Qualità,Kg_Venduti,Descrizione,Ricavo,Username_utente) VALUES(?,?,?,?,?)",
                             controller.getCiliegia().getQualita(),controller.getCiliegia().getKgVenduti(),controller.getCiliegia().getDescrizione(),
-                            controller.getCiliegia().getPrezzomedio(),controller.getCiliegia().getRicavo(),MenuApplication.getDatabase().getUsername_utente());
+                            controller.getCiliegia().getRicavo(),MenuApplication.getDatabase().getUsername_utente());
+
                     ciliegiaTable.setItems(getCiliegiaData());
-                    //ciliegiaTable.getItems().addAll(getCiliegiaData());
                     showSumRicavi(ricavoColumn);
                 }else{
                     Alert alert= new Alert(Alert.AlertType.WARNING);
@@ -150,7 +151,6 @@ public class CiliegieController {
             if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
                 if(!controller.getCiliegia().getQualita().equals("") && !controller.getCiliegia().getKgVenduti().equals("")
                         && !controller.getCiliegia().getDescrizione().equals("") && !controller.getCiliegia().getRicavo().equals("")) {
-                    //controller.getCiliegia().setPrezzomedio(calcoloPrezzoMedio(controller));
                     ciliegiaTable.getItems().remove(selectedIndex);
                     ciliegiaTable.getItems().add(controller.getCiliegia());
                     showSumRicavi(ricavoColumn);
@@ -198,12 +198,6 @@ public class CiliegieController {
         alert.setContentText("Perfavore seleziona una qualità dalla tabella");
         alert.showAndWait();
     }
-
-    public String calcoloPrezzoMedio(CiliegieEditController controller){
-        Double pm = Double.parseDouble(controller.getCiliegia().getRicavo())/Double.parseDouble(controller.getCiliegia().getKgVenduti());
-        return String.format("%.2f",pm);
-    }
-
 
     @FXML
     private void goBack() {
