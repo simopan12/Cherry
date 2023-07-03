@@ -26,12 +26,22 @@ public class CiliegieController {
     @FXML private TableColumn<Ciliegia,String> ricavoColumn;
     @FXML public Label ricavoTotaleLabel=new Label();
 
+    public static double getTotaleRicavi() {
+        return totaleRicavi;
+    }
+
+    public void setTotaleRicavi(double totaleRicavi) {
+        this.totaleRicavi = totaleRicavi;
+    }
+
+    private static double totaleRicavi;
+
 
     public void showSumRicavi(TableColumn <Ciliegia,String>ricavoColumn) {
         ObservableList<Ciliegia> items = ricavoColumn.getTableView().getItems();
         ricavoTotaleLabel.textProperty().bind(Bindings.createStringBinding(() -> {
-            double totaleRicavi = items.stream().mapToDouble(ciliegia -> Double.parseDouble(ciliegia.getRicavo())).sum();
-            return String.valueOf(totaleRicavi);
+            setTotaleRicavi(items.stream().mapToDouble(ciliegia -> Double.parseDouble(ciliegia.getRicavo())).sum());
+            return String.valueOf(getTotaleRicavi()+" €");
         }));
     }
 

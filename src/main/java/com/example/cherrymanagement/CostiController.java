@@ -26,6 +26,15 @@ public class CostiController {
 
     @FXML public Label totaleCostiLabel = new Label();
 
+    public static double getTotaleCosti() {
+        return totaleCosti;
+    }
+
+    public static void setTotaleCosti(double totaleCosti) {
+        CostiController.totaleCosti = totaleCosti;
+    }
+
+    private static double totaleCosti;
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -35,13 +44,13 @@ public class CostiController {
     public void showSumCosti(TableColumn <Costo,Double> ammontareColumn) {
         ObservableList<Costo> items = ammontareColumn.getTableView().getItems();
         DoubleBinding totaleSpeseBinding = Bindings.createDoubleBinding(() -> {
-            double totaleSpese = 0.0;
+            setTotaleCosti(0.0);
             for (Costo costo : items) {
-                totaleSpese += costo.getAmmontare();
+                setTotaleCosti(getTotaleCosti()+costo.getAmmontare());
             }
-            return totaleSpese;
+            return getTotaleCosti();
         }, items);
-        totaleCostiLabel.textProperty().bind(Bindings.format("%.2f", totaleSpeseBinding));
+        totaleCostiLabel.textProperty().bind(Bindings.format("%.2f €", totaleSpeseBinding));
     }
 
 

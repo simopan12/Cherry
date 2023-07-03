@@ -18,6 +18,14 @@ public class InfoController {
     @FXML public Label cognomeLabel = new Label();
     @FXML public Label nomeAziendaLabel = new Label();
     @FXML public Label usernameLabel = new Label();
+
+    @FXML public Label ricaviLabel= new Label();
+    @FXML public Label costiLabel = new Label();
+
+    @FXML public Label utileperditaLabel = new Label();
+
+    @FXML public Label differenzaLabel = new Label();
+
     @FXML public PieChart pieChartCiliegia = new PieChart();
     @FXML public PieChart pieChartDipendente = new PieChart();
 
@@ -47,6 +55,16 @@ public class InfoController {
         cognomeLabel.textProperty().set(utente.getCognomeUtente());
         nomeAziendaLabel.textProperty().set(utente.getAzienda());
         usernameLabel.textProperty().set(utente.getUsarname());
+        ricaviLabel.textProperty().set(String.valueOf(CiliegieController.getTotaleRicavi())+" €");
+        costiLabel.textProperty().set(String.valueOf(DipendentiController.getTotaleSpese()+CostiController.getTotaleCosti())+" €");
+        double differenza= CiliegieController.getTotaleRicavi()-DipendentiController.getTotaleSpese()-CostiController.getTotaleCosti();
+        if(differenza>=0){
+            utileperditaLabel.textProperty().set("Utile: ");
+            differenzaLabel.textProperty().set(String.valueOf(differenza)+" €");
+        }else{
+            utileperditaLabel.textProperty().set("Perdita: ");
+            differenzaLabel.textProperty().set(String.valueOf(-differenza)+" €");
+        }
     }
 
 

@@ -30,6 +30,16 @@ public class DipendentiController {
 
     @FXML public Label spesaTotaleLabel=new Label();
 
+    public static double getTotaleSpese() {
+        return totaleSpese;
+    }
+
+    public static void setTotaleSpese(double totaleSpese) {
+        DipendentiController.totaleSpese = totaleSpese;
+    }
+
+    private static double totaleSpese;
+
     public void setStage(Stage stage) {
         this.stage = stage;
     }
@@ -37,13 +47,13 @@ public class DipendentiController {
     public void showSumSpese(TableColumn <Dipendente,Double>stipendioColumn) {
         ObservableList<Dipendente> items = stipendioColumn.getTableView().getItems();
         DoubleBinding totaleSpeseBinding = Bindings.createDoubleBinding(() -> {
-            double totaleSpese = 0.0;
+            setTotaleSpese(0.0);
             for (Dipendente dipendente : items) {
-                totaleSpese += dipendente.getStipendio();
+                setTotaleSpese(getTotaleSpese()+dipendente.getStipendio());
             }
-            return totaleSpese;
+            return getTotaleSpese();
         }, items);
-        spesaTotaleLabel.textProperty().bind(Bindings.format("%.2f", totaleSpeseBinding));
+        spesaTotaleLabel.textProperty().bind(Bindings.format("%.2f €", totaleSpeseBinding));
     }
 
     public void initialize(){
