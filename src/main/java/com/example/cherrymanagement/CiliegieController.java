@@ -50,7 +50,6 @@ public class CiliegieController {
         ricavoColumn.setCellValueFactory(new PropertyValueFactory<>("ricavo"));
 
         ciliegiaTable.setItems(getCiliegiaData());
-
         ciliegiaTable.getSelectionModel().selectedItemProperty();
         showSumRicavi(ricavoColumn);
     }
@@ -78,16 +77,13 @@ public class CiliegieController {
             DialogPane view = loader.load();
             CiliegieEditController controller = loader.getController();
 
-            // Set an empty person into the controller
             controller.setCiliegia(new Ciliegia("", "" , "" ,""));
 
-            // Create the dialog
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Nuova Qualità");
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.setDialogPane(view);
 
-            // Show the dialog and wait until the user closes it
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
                 if(!controller.getCiliegia().getQualita().equals("")  && !controller.getCiliegia().getKgVenduti().equals("")
@@ -122,11 +118,9 @@ public class CiliegieController {
             DialogPane view = loader.load();
             CiliegieEditController controller = loader.getController();
 
-            // Set the person into the controller.
             int selectedIndex = selectedIndex();
             controller.setCiliegia(new Ciliegia(ciliegiaTable.getItems().get(selectedIndex)));
 
-            // Create the dialog
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Edit Qualita");
             dialog.initModality(Modality.WINDOW_MODAL);
@@ -145,14 +139,19 @@ public class CiliegieController {
             TextField ricavo = (TextField)dialogPane.lookup("#ricavoField");
             ricavo.setText(selectedCiliegia.getRicavo());
 
-            // Show the dialog and wait until the user closes it
             Optional<ButtonType> clickedButton = dialog.showAndWait();
 
             if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
                 if(!controller.getCiliegia().getQualita().equals("") && !controller.getCiliegia().getKgVenduti().equals("")
                         && !controller.getCiliegia().getDescrizione().equals("") && !controller.getCiliegia().getRicavo().equals("")) {
+
+                    MenuApplication.getDatabase().executeUpdate("DELETE FROM Ciliegie WHERE Qualità = ?",selectedCiliegia.getQualita());
+                    MenuApplication.getDatabase().executeUpdate("INSERT INTO CILIEGIE(Qualità,Kg_Venduti,Descrizione,Ricavo,Username_utente) VALUES(?,?,?,?,?)",
+                            controller.getCiliegia().getQualita(),controller.getCiliegia().getKgVenduti(),controller.getCiliegia().getDescrizione(),
+                            controller.getCiliegia().getRicavo(),MenuApplication.getDatabase().getUsername_utente());
+
                     ciliegiaTable.getItems().remove(selectedIndex);
-                    ciliegiaTable.getItems().add(controller.getCiliegia());
+                    ciliegiaTable.setItems(getCiliegiaData());
                     showSumRicavi(ricavoColumn);
                 }else{
                     Alert alert= new Alert(Alert.AlertType.WARNING);
@@ -167,6 +166,8 @@ public class CiliegieController {
             showNoCiliegiaSelectedAlert();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -178,15 +179,18 @@ public class CiliegieController {
             showSumRicavi(ricavoColumn);
         } catch (NoSuchElementException e) {
             showNoCiliegiaSelectedAlert();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void showConfirmationAlert(int index){
+    public void showConfirmationAlert(int index) throws SQLException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma");
         alert.setHeaderText("Sei sicuro di voler eliminare questa qualità?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
+            MenuApplication.getDatabase().executeUpdate("DELETE FROM Ciliegie WHERE Qualità = ?",getCiliegiaData().get(index).getQualita());
             ciliegiaTable.getItems().remove(index);
         }
     }

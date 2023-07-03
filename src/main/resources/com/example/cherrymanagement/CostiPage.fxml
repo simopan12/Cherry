@@ -9,33 +9,33 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cherrymanagement.CostiController">
+<AnchorPane prefHeight="535.0" prefWidth="743.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cherrymanagement.CostiController">
    <children>
-      <ToolBar prefHeight="40.0" prefWidth="600.0">
+      <ToolBar prefHeight="40.0" prefWidth="743.0">
          <items>
             <Button mnemonicParsing="false" onAction="#goBack" text="indietro" />
          </items>
       </ToolBar>
-      <TableView fx:id="costoTable" layoutY="40.0" prefHeight="322.0" prefWidth="600.0">
+      <TableView fx:id="costoTable" layoutY="40.0" prefHeight="443.0" prefWidth="743.0">
         <columns>
-          <TableColumn fx:id="idColumn" prefWidth="110.0" text="ID" />
-          <TableColumn fx:id="tipoColumn" prefWidth="378.4000244140625" text="Tipo" />
-            <TableColumn fx:id="ammontareColumn" prefWidth="110.0" text="Ammontare" />
+          <TableColumn fx:id="idColumn" prefWidth="175.0" text="ID" />
+          <TableColumn fx:id="tipoColumn" prefWidth="396.79998779296875" text="Tipo" />
+            <TableColumn fx:id="ammontareColumn" prefWidth="175.20000000000005" text="Ammontare" />
         </columns>
       </TableView>
-      <ButtonBar layoutX="287.0" layoutY="362.0" prefHeight="40.0" prefWidth="305.0">
+      <ButtonBar layoutX="423.0" layoutY="489.0" prefHeight="40.0" prefWidth="305.0">
         <buttons>
           <Button mnemonicParsing="false" onAction="#handleNewCosto" text="Add" />
             <Button layoutX="240.0" layoutY="17.0" mnemonicParsing="false" onAction="#handleEditCosto" text="Edit" />
             <Button layoutX="155.0" layoutY="17.0" mnemonicParsing="false" onAction="#handleDeleteCosto" text="Delete" />
         </buttons>
       </ButtonBar>
-      <Label layoutX="14.0" layoutY="366.0" prefHeight="32.0" prefWidth="128.0" text="Totale Costi: ">
+      <Label layoutX="14.0" layoutY="493.0" prefHeight="32.0" prefWidth="128.0" text="Totale Costi: ">
          <font>
             <Font size="22.0" />
          </font>
       </Label>
-      <Label fx:id="totaleCostiLabel" layoutX="142.0" layoutY="366.0" text="0">
+      <Label fx:id="totaleCostiLabel" layoutX="142.0" layoutY="493.0" text="0">
          <font>
             <Font size="22.0" />
          </font>

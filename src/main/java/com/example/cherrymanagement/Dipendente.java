@@ -9,17 +9,15 @@ public class Dipendente {
     private final StringProperty mansione;
     private final DoubleProperty paga;
     private final DoubleProperty ore;
-    private final DoubleProperty stipendio;
+    //private final DoubleProperty stipendio;
 
-    public Dipendente(String cf,String nome, String cognome,String mansione,double paga, double ore,double stipendio){
+    public Dipendente(String cf,String nome, String cognome,String mansione,double paga, double ore){
         this.cf=new SimpleStringProperty(cf);
         this.nome=new SimpleStringProperty(nome);
         this.cognome=new SimpleStringProperty(cognome);
         this.mansione=new SimpleStringProperty(mansione);
         this.paga=new SimpleDoubleProperty(paga);
         this.ore=new SimpleDoubleProperty(ore);
-        this.stipendio=new SimpleDoubleProperty(stipendio);
-
     }
 
     public Dipendente(Dipendente other){
@@ -29,7 +27,6 @@ public class Dipendente {
         this.mansione=new SimpleStringProperty(other.getMansione());
         this.paga= new SimpleDoubleProperty(other.getPaga());
         this.ore= new SimpleDoubleProperty(other.getOre());
-        this.stipendio= new SimpleDoubleProperty(other.getStipendio());
     }
 
     public String getCf() {
@@ -105,14 +102,7 @@ public class Dipendente {
     }
 
     public double getStipendio() {
-        return stipendio.get();
+        return getPaga() * getOre();
     }
 
-    public DoubleProperty stipendioProperty() {
-        return stipendio;
-    }
-
-    public void setStipendio(double stipendio) {
-        this.stipendio.set(stipendio);
-    }
 }

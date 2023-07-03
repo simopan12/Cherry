@@ -12,6 +12,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -62,7 +63,7 @@ public class DipendentiController {
     }
 
     private ObservableList<Dipendente> getDipendenteData() {
-        ObservableList<Dipendente> dipendenti = FXCollections.observableArrayList();
+        ObservableList<Dipendente> dipendenti = MenuApplication.getDatabase().getDipendenti(MenuApplication.getDatabase().getUsername_utente());;
         showSumSpese(stipendioColumn);
         return dipendenti;
     }
@@ -84,23 +85,25 @@ public class DipendentiController {
             DialogPane view = loader.load();
             DipendentiEditController controller = loader.getController();
 
-            // Set an empty person into the controller
-            controller.setDipendente(new Dipendente("", "" , "" ,"",1,0,0));
+            controller.setDipendente(new Dipendente("", "" , "" ,"",1,0));
 
-            // Create the dialog
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Nuovo Dipendente");
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.setDialogPane(view);
 
-            // Show the dialog and wait until the user closes it
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
                 if(!controller.getDipendente().getCf().equals("")  && !controller.getDipendente().getNome().equals("")
                       && !controller.getDipendente().getCognome().equals("") && !controller.getDipendente().getMansione().equals("")
-                && controller.getDipendente().getPaga()>0) {
-                    controller.getDipendente().setStipendio(calcoloStipendio(controller));
-                    dipendenteTable.getItems().add(controller.getDipendente());
+                        && controller.getDipendente().getPaga()>0) {
+
+                      MenuApplication.getDatabase().executeUpdate("INSERT INTO Dipendenti(CF,Nome,Cognome,Mansione,Paga,Ore,Username_utente) VALUES(?,?,?,?,?,?,?)",
+                            controller.getDipendente().getCf(),controller.getDipendente().getNome(),controller.getDipendente().getCognome(),
+                            controller.getDipendente().getMansione(),controller.getDipendente().getPaga(),
+                            controller.getDipendente().getOre(),MenuApplication.getDatabase().getUsername_utente());
+
+                    dipendenteTable.setItems(getDipendenteData());
                     showSumSpese(stipendioColumn);
                 }else{
                   Alert alert= new Alert(Alert.AlertType.WARNING);
@@ -112,6 +115,8 @@ public class DipendentiController {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -123,11 +128,9 @@ public class DipendentiController {
             DialogPane view = loader.load();
             DipendentiEditController controller = loader.getController();
 
-            // Set the person into the controller.
             int selectedIndex = selectedIndex();
             controller.setDipendente(new Dipendente(dipendenteTable.getItems().get(selectedIndex)));
 
-            // Create the dialog
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Edit Dipendente");
             dialog.initModality(Modality.WINDOW_MODAL);
@@ -150,16 +153,21 @@ public class DipendentiController {
             Spinner ore = (Spinner)dialogPane.lookup("#oreSpinner");
             ore.setValueFactory( new SpinnerValueFactory.DoubleSpinnerValueFactory(0,10000,selectedDipendente.getOre(),1));
 
-            // Show the dialog and wait until the user closes it
             Optional<ButtonType> clickedButton = dialog.showAndWait();
 
             if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
                 if(!controller.getDipendente().getCf().equals("") && !controller.getDipendente().getNome().equals("")
                         && !controller.getDipendente().getCognome().equals("") && !controller.getDipendente().getMansione().equals("")
                         && controller.getDipendente().getPaga()>0) {
-                    controller.getDipendente().setStipendio(calcoloStipendio(controller));
+
+                    MenuApplication.getDatabase().executeUpdate("DELETE FROM Dipendenti WHERE CF = ?",selectedDipendente.getCf());
+                    MenuApplication.getDatabase().executeUpdate("INSERT INTO Dipendenti(CF,Nome,Cognome,Mansione,Paga,Ore,Username_utente) VALUES(?,?,?,?,?,?,?)",
+                            controller.getDipendente().getCf(),controller.getDipendente().getNome(),controller.getDipendente().getCognome(),
+                            controller.getDipendente().getMansione(),controller.getDipendente().getPaga(),
+                            controller.getDipendente().getOre(),MenuApplication.getDatabase().getUsername_utente());
+
                     dipendenteTable.getItems().remove(selectedIndex);
-                    dipendenteTable.getItems().add(controller.getDipendente());
+                    dipendenteTable.setItems(getDipendenteData());
                     showSumSpese(stipendioColumn);
                 }else{
                     Alert alert= new Alert(Alert.AlertType.WARNING);
@@ -174,6 +182,8 @@ public class DipendentiController {
             showNoDipendenteSelectedAlert();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -185,15 +195,18 @@ public class DipendentiController {
             showSumSpese(stipendioColumn);
         } catch (NoSuchElementException e) {
             showNoDipendenteSelectedAlert();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void showConfirmationAlert(int index){
+    public void showConfirmationAlert(int index) throws SQLException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma");
         alert.setHeaderText("Sei sicuro di voler eliminare questo dipendente?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
+            MenuApplication.getDatabase().executeUpdate("DELETE FROM Dipendenti WHERE CF = ?",getDipendenteData().get(index).getCf());
             dipendenteTable.getItems().remove(index);
         }
     }
@@ -203,10 +216,6 @@ public class DipendentiController {
         alert.setHeaderText("Nessun dipendente è stata selezionata");
         alert.setContentText("Perfavore seleziona un dipendente dalla tabella");
         alert.showAndWait();
-    }
-
-    public double calcoloStipendio(DipendentiEditController controller){
-        return controller.getDipendente().getOre()*controller.getDipendente().getPaga();
     }
 
     @FXML
