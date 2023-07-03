@@ -4,7 +4,7 @@ import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.chart.PieChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
@@ -18,19 +18,30 @@ public class InfoController {
     @FXML public Label cognomeLabel=new Label();
     @FXML public Label nomeAziendaLabel=new Label();
     @FXML public Label usernameLabel=new Label();
-
     @FXML public PieChart pieChart =new PieChart();
+    @FXML public BarChart<String,Number> barChart;
 
     public void initialize(){
         ObservableList<Ciliegia> pieChartData =MenuApplication.getDatabase().getPieChartData();
         ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
 
         pieChartData.forEach(data ->
-                chartData.add(new PieChart.Data(data.getQualita(), Double.parseDouble(data.getKgVenduti())))
+                chartData.add(new PieChart.Data(data.getQualita() + " " + Double.parseDouble(data.getKgVenduti()) + " kg", Double.parseDouble(data.getKgVenduti())))
         );
 
-        pieChart = new PieChart(chartData);
-        // Aggiungi pieChart alla tua scena o a un nodo appropriato nella tua interfaccia grafica
+        pieChart.setData(chartData);
+
+
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("CF");
+        yAxis.setLabel("Ore di Lavoro");
+        barChart = new BarChart<>(xAxis,yAxis);
+
+        ObservableList<XYChart.Data<String, Number>> barChartData = MenuApplication.getDatabase().getBarChartData();
+        ObservableList<XYChart.Series<String, Number>> series = null;
+
+        barChart.setData(series);
     }
 
     public void showInfo(){
