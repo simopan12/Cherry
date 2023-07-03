@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -278,5 +279,52 @@ public class Database {
             ex.printStackTrace();
         }
         return null;
+    }
+
+    public Utente exportInfoFromDatabase(){
+        checkConnection();
+        try {
+            final String query= "SELECT * FROM Utenti WHERE Utenti.Username=?";
+            ResultSet resultSet= executeQuery(query,username_utente);
+
+            Utente utente =null;
+
+            if(resultSet.next()){
+                utente = new Utente(resultSet.getString("Username"),
+                        resultSet.getString("Password"),
+                        resultSet.getString("Nome_Utente"),
+                        resultSet.getString("Cognome_Utente"),
+                        resultSet.getString("Azienda"));
+            }
+            resultSet.close();
+            return utente;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ObservableList<Ciliegia> getPieChartData(){
+        checkConnection();
+        try {
+            final String query="SELECT * FROM Ciliegie WHERE Ciliegie.Username_utente = ?";
+            ResultSet resultSet =executeQuery(query,username_utente);
+
+            Ciliegia ciliegia=null;
+            ObservableList<Ciliegia> pieChartData = FXCollections.observableArrayList();
+            if(resultSet.next()){
+                do {
+                    ciliegia = new Ciliegia(resultSet.getString("Qualità"),
+                            resultSet.getString("Kg_Venduti"),
+                            resultSet.getString("Descrizione"),
+                            resultSet.getString("Ricavo"));
+                    pieChartData.add(ciliegia);
+                }while (resultSet.next());
+            }
+            resultSet.close();
+            return pieChartData;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

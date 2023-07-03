@@ -104,8 +104,10 @@ public class MenuController {
             infoController.setStage(stage);
 
 
+
             Scene scene = new Scene(root);
             stage.setScene(scene);
+            infoController.showInfo();
         }catch (Exception e){
             System.out.println("Errore in menu controller");
         }
