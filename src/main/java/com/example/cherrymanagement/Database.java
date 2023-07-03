@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -323,6 +324,54 @@ public class Database {
             resultSet.close();
             return pieChartData;
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getNomeAziendaData(){
+        checkConnection();
+        try {
+            final String query = "SELECT Utenti.Azienda FROM Utenti WHERE Utenti.Username = ?";
+            ResultSet resultSet = executeQuery(query,username_utente);
+
+            String nomeAzienda = null;
+            if(resultSet.next()){
+                nomeAzienda = resultSet.getString("Azienda");
+            }
+
+            resultSet.close();
+            return nomeAzienda;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ObservableList<XYChart.Data<String,Number>> getBarChartData(){
+        checkConnection();
+        try {
+            final String query = "SELECT * FROM Dipendenti WHERE Dipendenti.Username_utente = ?";
+            ResultSet resultSet = executeQuery(query,username_utente);
+
+            Dipendente dipendente = null;
+            XYChart.Data<String,Number> temp = new XYChart.Data<>();
+            ObservableList<XYChart.Data<String,Number>> barChartData = FXCollections.observableArrayList();
+            if(resultSet.next()){
+                do {
+                    dipendente = new Dipendente(resultSet.getString("CF"),
+                            resultSet.getString("Nome"),
+                            resultSet.getString("Cognome"),
+                            resultSet.getString("Mansione"),
+                            resultSet.getDouble("Paga"),
+                            resultSet.getDouble("Ore"));
+                    temp.setXValue(dipendente.getCf());
+                    temp.setYValue(dipendente.getOre());
+                    barChartData.add(temp);
+                }while (resultSet.next());
+            }
+            resultSet.close();
+            return barChartData;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

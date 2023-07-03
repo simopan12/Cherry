@@ -10,7 +10,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="535.0" prefWidth="743.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cherrymanagement.MenuController">
    <children>
-      <Label alignment="CENTER" layoutY="4.0" prefHeight="150.0" prefWidth="649.0" style="-fx-background-color: #ae1717;" text="Cherry Management" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Label fx:id="aziendaLabel" alignment="CENTER" layoutY="4.0" prefHeight="150.0" prefWidth="649.0" style="-fx-background-color: #ae1717;" text="Cherry Management" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <font>
             <Font name="Elephant" size="52.0" />
          </font>
