@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="366.0" prefWidth="604.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cherrymanagement.SignInController">
+<AnchorPane prefHeight="368.0" prefWidth="604.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cherrymanagement.SignInController">
    <children>
       <TextField fx:id="usernameField" layoutX="371.0" layoutY="165.0" prefHeight="26.0" prefWidth="186.0" />
       <PasswordField fx:id="passwordField" layoutX="371.0" layoutY="217.0" prefHeight="26.0" prefWidth="185.0" />
@@ -20,7 +20,7 @@
             <Font name="Elephant" size="50.0" />
          </font>
       </Label>
-      <AnchorPane prefHeight="366.0" prefWidth="302.0" style="-fx-background-color: #ae1717;">
+      <AnchorPane prefHeight="368.0" prefWidth="334.0" style="-fx-background-color: #ae1717;">
          <children>
             <Label alignment="CENTER" layoutY="113.0" prefHeight="139.0" prefWidth="334.0" text="Cherry Management" textFill="WHITE">
                <font>

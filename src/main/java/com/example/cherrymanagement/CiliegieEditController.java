@@ -10,7 +10,6 @@ public class CiliegieEditController {
     @FXML private TextField qualitaField;
     @FXML private TextField kgVendutiField;
     @FXML private TextField descrizioneField;
-    //@FXML private TextField prezzomedioField;
     @FXML private TextField ricavoField;
     Ciliegia ciliegia;
 

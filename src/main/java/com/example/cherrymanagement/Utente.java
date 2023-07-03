@@ -6,7 +6,6 @@ import javafx.beans.property.StringProperty;
 public class Utente {
 
     private final StringProperty usarname;
-
     private final StringProperty password;
     private final StringProperty nomeUtente;
     private final StringProperty cognomeUtente;

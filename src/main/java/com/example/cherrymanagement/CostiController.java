@@ -12,6 +12,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -57,7 +58,7 @@ public class CostiController {
 
 
     private ObservableList<Costo> getCostoData() {
-        ObservableList<Costo> costi = FXCollections.observableArrayList();
+        ObservableList<Costo> costi = MenuApplication.getDatabase().getCosti(MenuApplication.getDatabase().getUsername_utente());;
         showSumCosti(ammontareColumn);
         return costi;
     }
@@ -80,21 +81,23 @@ public class CostiController {
             DialogPane view = loader.load();
             CostiEditController controller = loader.getController();
 
-            // Set an empty person into the controller
             controller.setCosto(new Costo("", "" , 0.0));
 
-            // Create the dialog
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Nuovo Costo");
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.setDialogPane(view);
 
-            // Show the dialog and wait until the user closes it
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
                 if(!controller.getCosto().getId().equals("")  && !controller.getCosto().getTipo().equals("")
                         && controller.getCosto().getAmmontare()>0) {
-                    costoTable.getItems().add(controller.getCosto());
+
+                    MenuApplication.getDatabase().executeUpdate("INSERT INTO Costi(ID,Tipo,Ammontare,Username_utente) VALUES(?,?,?,?)",
+                            controller.getCosto().getId(),controller.getCosto().getTipo(),controller.getCosto().getAmmontare(),
+                            MenuApplication.getDatabase().getUsername_utente());
+
+                    costoTable.setItems(getCostoData());
                     showSumCosti(ammontareColumn);
                 }else{
                     Alert alert= new Alert(Alert.AlertType.WARNING);
@@ -106,6 +109,8 @@ public class CostiController {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -118,11 +123,9 @@ public class CostiController {
             DialogPane view = loader.load();
             CostiEditController controller = loader.getController();
 
-            // Set the person into the controller.
             int selectedIndex = selectedIndex();
             controller.setCosto(new Costo(costoTable.getItems().get(selectedIndex)));
 
-            // Create the dialog
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Edit Costo");
             dialog.initModality(Modality.WINDOW_MODAL);
@@ -139,14 +142,19 @@ public class CostiController {
             TextField ammontare = (TextField)dialogPane.lookup("#ammontareField");
             ammontare.setText(String.valueOf(selectedCosto.getAmmontare()));
 
-            // Show the dialog and wait until the user closes it
             Optional<ButtonType> clickedButton = dialog.showAndWait();
 
             if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
                 if(!controller.getCosto().getId().equals("") && !controller.getCosto().getTipo().equals("")
                         && controller.getCosto().getAmmontare()>0) {
+
+                    MenuApplication.getDatabase().executeUpdate("DELETE FROM Costi WHERE ID = ?",selectedCosto.getId());
+                    MenuApplication.getDatabase().executeUpdate("INSERT INTO Costi(ID,Tipo,Ammontare,Username_utente) VALUES(?,?,?,?)",
+                            controller.getCosto().getId(),controller.getCosto().getTipo(),controller.getCosto().getAmmontare(),
+                            MenuApplication.getDatabase().getUsername_utente());
+
                     costoTable.getItems().remove(selectedIndex);
-                    costoTable.getItems().add(controller.getCosto());
+                    costoTable.setItems(getCostoData());
                     showSumCosti(ammontareColumn);
                 }else{
                     Alert alert= new Alert(Alert.AlertType.WARNING);
@@ -161,6 +169,8 @@ public class CostiController {
             showNoCostoSelectedAlert();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -172,15 +182,18 @@ public class CostiController {
             showSumCosti(ammontareColumn);
         } catch (NoSuchElementException e) {
             showNoCostoSelectedAlert();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void showConfirmationAlert(int index){
+    public void showConfirmationAlert(int index) throws SQLException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma");
         alert.setHeaderText("Sei sicuro di voler eliminare questo costo?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
+            MenuApplication.getDatabase().executeUpdate("DELETE FROM Costi WHERE ID = ?",getCostoData().get(index).getId());
             costoTable.getItems().remove(index);
         }
     }

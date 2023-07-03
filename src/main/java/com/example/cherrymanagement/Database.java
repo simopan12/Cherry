@@ -199,7 +199,6 @@ public class Database {
         try {
             final String query = "SELECT * FROM Ciliegie JOIN Utenti ON Ciliegie.Username_utente = Utenti.Username WHERE Ciliegie.Username_utente = ?";
 
-            //PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             ResultSet resultSet = executeQuery(query,uuid);
 
             Ciliegia ciliegia = null;
@@ -217,6 +216,64 @@ public class Database {
 
             resultSet.close();
             return FXCollections.observableList(ciliegie);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public ObservableList<Costo> getCosti(String uuid) {
+        checkConnection();
+        try {
+            final String query = "SELECT * FROM Costi JOIN Utenti ON Costi.Username_utente = Utenti.Username WHERE Costi.Username_utente = ?";
+
+            ResultSet resultSet = executeQuery(query,uuid);
+
+            Costo costo = null;
+            List<Costo> costi = new ArrayList<>();
+
+            if (resultSet.next()) {
+                do {
+                    costo = new Costo(resultSet.getString("ID"),
+                            resultSet.getString("Tipo"),
+                            resultSet.getDouble("Ammontare"));
+                    costi.add(costo);
+                } while (resultSet.next());
+            }
+
+            resultSet.close();
+            return FXCollections.observableList(costi);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public ObservableList<Dipendente> getDipendenti(String uuid) {
+        checkConnection();
+        try {
+            final String query = "SELECT * FROM Dipendenti JOIN Utenti ON Dipendenti.Username_utente = Utenti.Username WHERE Dipendenti.Username_utente = ?";
+
+            ResultSet resultSet = executeQuery(query,uuid);
+
+            Dipendente dipendente = null;
+            List<Dipendente> dipendenti = new ArrayList<>();
+
+            if (resultSet.next()) {
+                do {
+                    dipendente = new Dipendente(resultSet.getString("CF"),
+                            resultSet.getString("Nome"),
+                            resultSet.getString("Cognome"),
+                            resultSet.getString("Mansione"),
+                            resultSet.getDouble("Paga"),
+                            resultSet.getDouble("Ore"));
+                    dipendenti.add(dipendente);
+                } while (resultSet.next());
+            }
+
+            resultSet.close();
+            return FXCollections.observableList(dipendenti);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
