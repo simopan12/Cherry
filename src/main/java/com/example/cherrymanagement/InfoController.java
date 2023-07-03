@@ -14,43 +14,39 @@ import java.util.ResourceBundle;
 public class InfoController {
     private Stage stage;
 
-    @FXML public Label nomeLabel=new Label();
-    @FXML public Label cognomeLabel=new Label();
-    @FXML public Label nomeAziendaLabel=new Label();
-    @FXML public Label usernameLabel=new Label();
-    @FXML public PieChart pieChart =new PieChart();
-    @FXML public BarChart<String,Number> barChart;
+    @FXML public Label nomeLabel = new Label();
+    @FXML public Label cognomeLabel = new Label();
+    @FXML public Label nomeAziendaLabel = new Label();
+    @FXML public Label usernameLabel = new Label();
+    @FXML public PieChart pieChartCiliegia = new PieChart();
+    @FXML public PieChart pieChartDipendente = new PieChart();
 
     public void initialize(){
-        ObservableList<Ciliegia> pieChartData =MenuApplication.getDatabase().getPieChartData();
-        ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
+        ObservableList<Ciliegia> pieChartDataCiliegia = MenuApplication.getDatabase().getPieChartDataCiliegia();
+        ObservableList<PieChart.Data> chartDataCiliegia = FXCollections.observableArrayList();
 
-        pieChartData.forEach(data ->
-                chartData.add(new PieChart.Data(data.getQualita() + " " + Double.parseDouble(data.getKgVenduti()) + " kg", Double.parseDouble(data.getKgVenduti())))
+        pieChartDataCiliegia.forEach(data ->
+                chartDataCiliegia.add(new PieChart.Data(data.getQualita() + " " + Double.parseDouble(data.getKgVenduti()) + " kg", Double.parseDouble(data.getKgVenduti())))
         );
+        pieChartCiliegia.setData(chartDataCiliegia);
 
-        pieChart.setData(chartData);
 
+        ObservableList<Dipendente> pieChartDataDipendente = MenuApplication.getDatabase().getPieChartDataDipendente();
+        ObservableList<PieChart.Data> chartDataDipendente = FXCollections.observableArrayList();
 
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("CF");
-        yAxis.setLabel("Ore di Lavoro");
-        barChart = new BarChart<>(xAxis,yAxis);
+        pieChartDataDipendente.forEach(data ->
+                chartDataDipendente.add(new PieChart.Data(data.getNome() + " " + data.getCognome() + " " + data.getOre() + "h", data.getOre()))
+        );
+        pieChartDipendente.setData(chartDataDipendente);
 
-        ObservableList<XYChart.Data<String, Number>> barChartData = MenuApplication.getDatabase().getBarChartData();
-        ObservableList<XYChart.Series<String, Number>> series = null;
-
-        barChart.setData(series);
     }
 
     public void showInfo(){
-        Utente utente =MenuApplication.getDatabase().exportInfoFromDatabase();
+        Utente utente = MenuApplication.getDatabase().exportInfoFromDatabase();
         nomeLabel.textProperty().set(utente.getNomeUtente());
         cognomeLabel.textProperty().set(utente.getCognomeUtente());
         nomeAziendaLabel.textProperty().set(utente.getAzienda());
         usernameLabel.textProperty().set(utente.getUsarname());
-        initialize();
     }
 
 

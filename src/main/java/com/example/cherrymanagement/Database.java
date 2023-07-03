@@ -304,7 +304,7 @@ public class Database {
         }
     }
 
-    public ObservableList<Ciliegia> getPieChartData(){
+    public ObservableList<Ciliegia> getPieChartDataCiliegia(){
         checkConnection();
         try {
             final String query="SELECT * FROM Ciliegie WHERE Ciliegie.Username_utente = ?";
@@ -348,15 +348,14 @@ public class Database {
         }
     }
 
-    public ObservableList<XYChart.Data<String,Number>> getBarChartData(){
+    public ObservableList<Dipendente> getPieChartDataDipendente(){
         checkConnection();
         try {
-            final String query = "SELECT * FROM Dipendenti WHERE Dipendenti.Username_utente = ?";
-            ResultSet resultSet = executeQuery(query,username_utente);
+            final String query="SELECT * FROM Dipendenti WHERE Dipendenti.Username_utente = ?";
+            ResultSet resultSet =executeQuery(query,username_utente);
 
-            Dipendente dipendente = null;
-            XYChart.Data<String,Number> temp = new XYChart.Data<>();
-            ObservableList<XYChart.Data<String,Number>> barChartData = FXCollections.observableArrayList();
+            Dipendente dipendente=null;
+            ObservableList<Dipendente> pieChartData = FXCollections.observableArrayList();
             if(resultSet.next()){
                 do {
                     dipendente = new Dipendente(resultSet.getString("CF"),
@@ -365,13 +364,12 @@ public class Database {
                             resultSet.getString("Mansione"),
                             resultSet.getDouble("Paga"),
                             resultSet.getDouble("Ore"));
-                    temp.setXValue(dipendente.getCf());
-                    temp.setYValue(dipendente.getOre());
-                    barChartData.add(temp);
+                    pieChartData.add(dipendente);
                 }while (resultSet.next());
             }
             resultSet.close();
-            return barChartData;
+            return pieChartData;
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
