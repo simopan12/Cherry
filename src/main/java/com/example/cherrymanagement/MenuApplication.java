@@ -21,7 +21,7 @@ public class MenuApplication extends Application {
 
         FXMLLoader fxmlLoader = new FXMLLoader(MenuApplication.class.getResource("SignInPage.fxml"));
         Parent root= fxmlLoader.load();
-        stage.getIcons().add(new Image("/image/cherryicon.png"));
+        stage.getIcons().add(new Image("/image/cherryimage.jpg"));
 
         //Ottenere il controller dalla scena principale
         SignInController signInController = fxmlLoader.getController();
@@ -35,7 +35,7 @@ public class MenuApplication extends Application {
 
 
     public static void main(String[] args) throws SQLException {
-        database =new Database("jdbc:sqlserver://localhost:1433;database=CherryManagementDB","sa","Nicolo23.");
+        database =new Database("jdbc:sqlserver://localhost:1433;database=master","sa","Nicolo23.");
         launch();
     }
 

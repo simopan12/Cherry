@@ -209,9 +209,9 @@ public class Database {
             if (resultSet.next()) {
                 do {
                     ciliegia = new Ciliegia(resultSet.getString("Qualità"),
-                            resultSet.getString("Kg_Venduti"),
+                            resultSet.getDouble("Kg_Venduti"),
                             resultSet.getString("Descrizione"),
-                            resultSet.getString("Ricavo"));
+                            resultSet.getDouble("Ricavo"));
                     ciliegie.add(ciliegia);
                 } while (resultSet.next());
             }
@@ -315,9 +315,9 @@ public class Database {
             if(resultSet.next()){
                 do {
                     ciliegia = new Ciliegia(resultSet.getString("Qualità"),
-                            resultSet.getString("Kg_Venduti"),
+                            resultSet.getDouble("Kg_Venduti"),
                             resultSet.getString("Descrizione"),
-                            resultSet.getString("Ricavo"));
+                            resultSet.getDouble("Ricavo"));
                     pieChartData.add(ciliegia);
                 }while (resultSet.next());
             }
@@ -374,4 +374,34 @@ public class Database {
             throw new RuntimeException(e);
         }
     }
+
+    public double getCiliegieRicavi(){
+        ObservableList<Ciliegia> ciliegie = getCiliegie(username_utente);
+        double ricavi = 0;
+        for(Ciliegia ciliegia : ciliegie){
+            ricavi += ciliegia.getRicavo();
+        }
+        return ricavi;
+    }
+
+    public double getDipendentiStipendi(){
+        ObservableList<Dipendente> dipendenti = getDipendenti(username_utente);
+        double stipendi = 0;
+        for(Dipendente dipendente : dipendenti){
+            stipendi += dipendente.getStipendio();
+        }
+        return stipendi;
+    }
+
+    public double getCostiAmmontare(){
+        ObservableList<Costo> costi = getCosti(username_utente);
+        double ammontare = 0;
+
+        for(Costo costo : costi){
+            ammontare += costo.getAmmontare();
+        }
+
+        return ammontare;
+    }
+
 }

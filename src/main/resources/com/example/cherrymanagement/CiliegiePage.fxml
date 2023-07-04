@@ -32,7 +32,7 @@
             <Button mnemonicParsing="false" onAction="#handleDeleteCiliegia" text="Delete" />
         </buttons>
       </ButtonBar>
-      <Label layoutX="14.0" layoutY="487.0" prefHeight="40.0" prefWidth="161.0" text="Totale Ricavi:">
+      <Label layoutX="14.0" layoutY="487.0" prefHeight="40.0" prefWidth="129.0" text="Totale Ricavi:">
          <font>
             <Font size="22.0" />
          </font></Label>

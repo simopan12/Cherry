@@ -2,7 +2,6 @@ package com.example.cherrymanagement;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +9,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.NoSuchElementException;
@@ -23,34 +21,11 @@ public class CostiController {
     @FXML private TableColumn<Costo,String> idColumn;
     @FXML private TableColumn<Costo,String> tipoColumn;
     @FXML private TableColumn<Costo,Double> ammontareColumn;
-
     @FXML public Label totaleCostiLabel = new Label();
 
-    public static double getTotaleCosti() {
-        return totaleCosti;
-    }
-
-    public static void setTotaleCosti(double totaleCosti) {
-        CostiController.totaleCosti = totaleCosti;
-    }
-
-    private static double totaleCosti;
 
     public void setStage(Stage stage) {
         this.stage = stage;
-    }
-
-
-    public void showSumCosti(TableColumn <Costo,Double> ammontareColumn) {
-        ObservableList<Costo> items = ammontareColumn.getTableView().getItems();
-        DoubleBinding totaleSpeseBinding = Bindings.createDoubleBinding(() -> {
-            setTotaleCosti(0.0);
-            for (Costo costo : items) {
-                setTotaleCosti(getTotaleCosti()+costo.getAmmontare());
-            }
-            return getTotaleCosti();
-        }, items);
-        totaleCostiLabel.textProperty().bind(Bindings.format("%.2f €", totaleSpeseBinding));
     }
 
 
@@ -62,13 +37,13 @@ public class CostiController {
 
         costoTable.setItems(getCostoData());
         costoTable.getSelectionModel().selectedItemProperty();
-        showSumCosti(ammontareColumn);
+        totaleCostiLabel.textProperty().bind(Bindings.format("%.2f €", MenuApplication.getDatabase().getCostiAmmontare()));
     }
 
 
     private ObservableList<Costo> getCostoData() {
         ObservableList<Costo> costi = MenuApplication.getDatabase().getCosti(MenuApplication.getDatabase().getUsername_utente());;
-        showSumCosti(ammontareColumn);
+        totaleCostiLabel.textProperty().bind(Bindings.format("%.2f €", MenuApplication.getDatabase().getCostiAmmontare()));
         return costi;
     }
 
@@ -107,7 +82,7 @@ public class CostiController {
                             MenuApplication.getDatabase().getUsername_utente());
 
                     costoTable.setItems(getCostoData());
-                    showSumCosti(ammontareColumn);
+                    totaleCostiLabel.textProperty().bind(Bindings.format("%.2f €", MenuApplication.getDatabase().getCostiAmmontare()));
                 }else{
                     Alert alert= new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Attenzione");
@@ -164,7 +139,7 @@ public class CostiController {
 
                     costoTable.getItems().remove(selectedIndex);
                     costoTable.setItems(getCostoData());
-                    showSumCosti(ammontareColumn);
+                    totaleCostiLabel.textProperty().bind(Bindings.format("%.2f €", MenuApplication.getDatabase().getCostiAmmontare()));
                 }else{
                     Alert alert= new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Attenzione");
@@ -188,7 +163,7 @@ public class CostiController {
         try {
             int selectedIndex = selectedIndex();
             showConfirmationAlert(selectedIndex);
-            showSumCosti(ammontareColumn);
+            totaleCostiLabel.textProperty().bind(Bindings.format("%.2f €", MenuApplication.getDatabase().getCostiAmmontare()));
         } catch (NoSuchElementException e) {
             showNoCostoSelectedAlert();
         } catch (SQLException e) {

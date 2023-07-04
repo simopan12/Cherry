@@ -4,23 +4,23 @@ import javafx.beans.property.*;
 
 public class Ciliegia {
     private final StringProperty qualita;
-    private final StringProperty kgVenduti;
+    private final DoubleProperty kgVenduti;
     private final StringProperty descrizione;
-    private final StringProperty ricavo;
+    private final DoubleProperty ricavo;
 
 
-    public Ciliegia(String qualita, String kgVenduti, String descrizione, String ricavo) {
+    public Ciliegia(String qualita, Double kgVenduti, String descrizione, Double ricavo) {
         this.qualita = new SimpleStringProperty(qualita);
-        this.kgVenduti = new SimpleStringProperty(kgVenduti);
+        this.kgVenduti = new SimpleDoubleProperty(kgVenduti);
         this.descrizione = new SimpleStringProperty(descrizione);
-        this.ricavo = new SimpleStringProperty(ricavo);
+        this.ricavo = new SimpleDoubleProperty(ricavo);
     }
 
     public Ciliegia(Ciliegia other){
         this.qualita = new SimpleStringProperty(other.getQualita());
-        this.kgVenduti = new SimpleStringProperty(other.getKgVenduti());
+        this.kgVenduti = new SimpleDoubleProperty(other.getKgVenduti());
         this.descrizione = new SimpleStringProperty(other.getDescrizione());
-        this.ricavo = new SimpleStringProperty(other.getRicavo());
+        this.ricavo = new SimpleDoubleProperty(other.getRicavo());
     }
 
     public String getQualita() {
@@ -35,15 +35,15 @@ public class Ciliegia {
         this.qualita.set(qualita);
     }
 
-    public String getKgVenduti() {
+    public Double getKgVenduti() {
         return kgVenduti.get();
     }
 
-    public StringProperty kgVendutiProperty() {
+    public DoubleProperty kgVendutiProperty() {
         return kgVenduti;
     }
 
-    public void setKgVenduti(String kgVenduti) {
+    public void setKgVenduti(Double kgVenduti) {
         this.kgVenduti.set(kgVenduti);
     }
 
@@ -59,23 +59,22 @@ public class Ciliegia {
         this.descrizione.set(descrizione);
     }
 
-    public String getPrezzomedio() {
-        Double pm = Double.parseDouble(getRicavo())/Double.parseDouble(getKgVenduti());
-        return String.format("%.2f",pm);
+    public Double getPrezzomedio() {
+        Double pm = getRicavo() / getKgVenduti();
+        return Math.round(pm * 100.0) / 100.0;
     }
 
-    public String getRicavo() {
+    public Double getRicavo() {
         return ricavo.get();
     }
 
-    public StringProperty ricavoProperty() {
+    public DoubleProperty ricavoProperty() {
         return ricavo;
     }
 
-    public void setRicavo(String ricavo) {
+    public void setRicavo(Double ricavo) {
         this.ricavo.set(ricavo);
     }
-
 
 }
 
