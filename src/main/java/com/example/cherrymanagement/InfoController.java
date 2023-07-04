@@ -67,7 +67,6 @@ public class InfoController {
         }
     }
 
-
     public void setStage(Stage stage) {
         this.stage = stage;
     }

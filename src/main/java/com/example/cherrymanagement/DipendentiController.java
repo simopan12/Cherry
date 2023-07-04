@@ -34,7 +34,7 @@ public class DipendentiController {
         return totaleSpese;
     }
 
-    public static void setTotaleSpese(double totaleSpese) {
+    public void setTotaleSpese(double totaleSpese) {
         DipendentiController.totaleSpese = totaleSpese;
     }
 
