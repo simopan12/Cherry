@@ -30,31 +30,11 @@ public class DipendentiController {
 
     @FXML public Label spesaTotaleLabel=new Label();
 
-    public static double getTotaleSpese() {
-        return totaleSpese;
-    }
-
-    public void setTotaleSpese(double totaleSpese) {
-        DipendentiController.totaleSpese = totaleSpese;
-    }
-
-    private static double totaleSpese;
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
-    public void showSumSpese(TableColumn <Dipendente,Double>stipendioColumn) {
-        ObservableList<Dipendente> items = stipendioColumn.getTableView().getItems();
-        DoubleBinding totaleSpeseBinding = Bindings.createDoubleBinding(() -> {
-            setTotaleSpese(0.0);
-            for (Dipendente dipendente : items) {
-                setTotaleSpese(getTotaleSpese()+dipendente.getStipendio());
-            }
-            return getTotaleSpese();
-        }, items);
-        spesaTotaleLabel.textProperty().bind(Bindings.format("%.2f €", totaleSpeseBinding));
-    }
 
     public void initialize(){
 
@@ -69,12 +49,12 @@ public class DipendentiController {
 
         dipendenteTable.setItems(getDipendenteData());
         dipendenteTable.getSelectionModel().selectedItemProperty();
-        showSumSpese(stipendioColumn);
+        spesaTotaleLabel.textProperty().bind(Bindings.format("%.2f €", MenuApplication.getDatabase().getDipendentiStipendi()));
     }
 
     private ObservableList<Dipendente> getDipendenteData() {
         ObservableList<Dipendente> dipendenti = MenuApplication.getDatabase().getDipendenti(MenuApplication.getDatabase().getUsername_utente());;
-        showSumSpese(stipendioColumn);
+        spesaTotaleLabel.textProperty().bind(Bindings.format("%.2f €", MenuApplication.getDatabase().getDipendentiStipendi()));
         return dipendenti;
     }
 
@@ -114,7 +94,7 @@ public class DipendentiController {
                             controller.getDipendente().getOre(),MenuApplication.getDatabase().getUsername_utente());
 
                     dipendenteTable.setItems(getDipendenteData());
-                    showSumSpese(stipendioColumn);
+                    spesaTotaleLabel.textProperty().bind(Bindings.format("%.2f €", MenuApplication.getDatabase().getDipendentiStipendi()));
                 }else{
                   Alert alert= new Alert(Alert.AlertType.WARNING);
                    alert.setTitle("Attenzione");
@@ -178,7 +158,7 @@ public class DipendentiController {
 
                     dipendenteTable.getItems().remove(selectedIndex);
                     dipendenteTable.setItems(getDipendenteData());
-                    showSumSpese(stipendioColumn);
+                    spesaTotaleLabel.textProperty().bind(Bindings.format("%.2f €", MenuApplication.getDatabase().getDipendentiStipendi()));
                 }else{
                     Alert alert= new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Attenzione");
@@ -202,7 +182,7 @@ public class DipendentiController {
         try {
             int selectedIndex = selectedIndex();
             showConfirmationAlert(selectedIndex);
-            showSumSpese(stipendioColumn);
+            spesaTotaleLabel.textProperty().bind(Bindings.format("%.2f €", MenuApplication.getDatabase().getDipendentiStipendi()));
         } catch (NoSuchElementException e) {
             showNoDipendenteSelectedAlert();
         } catch (SQLException e) {

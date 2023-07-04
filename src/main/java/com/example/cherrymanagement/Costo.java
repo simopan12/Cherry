@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.util.concurrent.ForkJoinWorkerThread;
 
 public class Costo {
 

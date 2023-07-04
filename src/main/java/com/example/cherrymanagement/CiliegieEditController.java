@@ -26,7 +26,7 @@ public class CiliegieEditController {
                     showAlert();
                     kgVendutiField.textProperty().set("0");
                 } else {
-                    ciliegia.kgVendutiProperty().set(newValue);
+                    ciliegia.kgVendutiProperty().set(Double.parseDouble(newValue));
                 }
             });
         });
@@ -40,11 +40,10 @@ public class CiliegieEditController {
                     showAlert();
                     ricavoField.textProperty().set("0");
                 } else {
-                    ciliegia.ricavoProperty().set(newValue);
+                    ciliegia.ricavoProperty().set(Double.parseDouble(newValue));
                 }
             });
         });
-
     }
 
 
@@ -58,9 +57,9 @@ public class CiliegieEditController {
 
     void update() {
         qualitaField.textProperty().set(ciliegia.getQualita());
-        kgVendutiField.textProperty().set(ciliegia.getKgVenduti());
+        kgVendutiField.textProperty().set(String.valueOf(ciliegia.getKgVenduti()));
         descrizioneField.textProperty().set(ciliegia.getDescrizione());
-        ricavoField.textProperty().set(ciliegia.getRicavo());
+        ricavoField.textProperty().set(String.valueOf(ciliegia.getRicavo()));
     }
 
 
@@ -70,6 +69,4 @@ public class CiliegieEditController {
     public void setCiliegia(Ciliegia ciliegia) {
         this.ciliegia = ciliegia;
     }
-
-
 }

@@ -3,8 +3,6 @@ package com.example.cherrymanagement;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 
 public class CostiEditController {

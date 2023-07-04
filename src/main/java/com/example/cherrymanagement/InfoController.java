@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -18,23 +19,20 @@ public class InfoController {
     @FXML public Label cognomeLabel = new Label();
     @FXML public Label nomeAziendaLabel = new Label();
     @FXML public Label usernameLabel = new Label();
-
     @FXML public Label ricaviLabel= new Label();
     @FXML public Label costiLabel = new Label();
-
     @FXML public Label utileperditaLabel = new Label();
-
     @FXML public Label differenzaLabel = new Label();
-
     @FXML public PieChart pieChartCiliegia = new PieChart();
     @FXML public PieChart pieChartDipendente = new PieChart();
+
 
     public void initialize(){
         ObservableList<Ciliegia> pieChartDataCiliegia = MenuApplication.getDatabase().getPieChartDataCiliegia();
         ObservableList<PieChart.Data> chartDataCiliegia = FXCollections.observableArrayList();
 
         pieChartDataCiliegia.forEach(data ->
-                chartDataCiliegia.add(new PieChart.Data(data.getQualita() + " " + Double.parseDouble(data.getKgVenduti()) + " kg", Double.parseDouble(data.getKgVenduti())))
+                chartDataCiliegia.add(new PieChart.Data(data.getQualita() + " " + data.getKgVenduti() + " kg", data.getKgVenduti()))
         );
         pieChartCiliegia.setData(chartDataCiliegia);
 
@@ -55,15 +53,15 @@ public class InfoController {
         cognomeLabel.textProperty().set(utente.getCognomeUtente());
         nomeAziendaLabel.textProperty().set(utente.getAzienda());
         usernameLabel.textProperty().set(utente.getUsarname());
-        ricaviLabel.textProperty().set(String.valueOf(CiliegieController.getTotaleRicavi())+" €");
-        costiLabel.textProperty().set(String.valueOf(DipendentiController.getTotaleSpese()+CostiController.getTotaleCosti())+" €");
-        double differenza= CiliegieController.getTotaleRicavi()-DipendentiController.getTotaleSpese()-CostiController.getTotaleCosti();
+        ricaviLabel.textProperty().set(MenuApplication.getDatabase().getCiliegieRicavi()+" €");
+        costiLabel.textProperty().set((MenuApplication.getDatabase().getDipendentiStipendi() + MenuApplication.getDatabase().getCostiAmmontare())+" €");
+        double differenza = MenuApplication.getDatabase().getCiliegieRicavi() - (MenuApplication.getDatabase().getDipendentiStipendi() + MenuApplication.getDatabase().getCostiAmmontare());
         if(differenza>=0){
             utileperditaLabel.textProperty().set("Utile: ");
-            differenzaLabel.textProperty().set(String.valueOf(differenza)+" €");
+            differenzaLabel.textProperty().set(differenza+" €");
         }else{
             utileperditaLabel.textProperty().set("Perdita: ");
-            differenzaLabel.textProperty().set(String.valueOf(-differenza)+" €");
+            differenzaLabel.textProperty().set(-differenza+" €");
         }
     }
 

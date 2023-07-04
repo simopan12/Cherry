@@ -1,8 +1,7 @@
 package com.example.cherrymanagement;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleListProperty;
-import javafx.collections.FXCollections;
+import javafx.beans.binding.DoubleBinding;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +11,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.Format;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -20,31 +18,11 @@ public class CiliegieController {
     private Stage stage;
     @FXML private TableView<Ciliegia> ciliegiaTable;
     @FXML private TableColumn<Ciliegia,String> qualitaColumn;
-    @FXML private TableColumn<Ciliegia,String> kgVendutiColumn;
+    @FXML private TableColumn<Ciliegia,Double> kgVendutiColumn;
     @FXML private TableColumn<Ciliegia,String> descrizioneColumn;
-    @FXML private TableColumn<Ciliegia,String> prezzomedioColumn;
-    @FXML private TableColumn<Ciliegia,String> ricavoColumn;
+    @FXML private TableColumn<Ciliegia,Double> prezzomedioColumn;
+    @FXML private TableColumn<Ciliegia,Double> ricavoColumn;
     @FXML public Label ricavoTotaleLabel=new Label();
-
-    public static double getTotaleRicavi() {
-        return totaleRicavi;
-    }
-
-    public void setTotaleRicavi(double totaleRicavi) {
-        this.totaleRicavi = totaleRicavi;
-    }
-
-    private static double totaleRicavi;
-
-
-    public void showSumRicavi(TableColumn <Ciliegia,String>ricavoColumn) {
-        ObservableList<Ciliegia> items = ricavoColumn.getTableView().getItems();
-        ricavoTotaleLabel.textProperty().bind(Bindings.createStringBinding(() -> {
-            setTotaleRicavi(items.stream().mapToDouble(ciliegia -> Double.parseDouble(ciliegia.getRicavo())).sum());
-            return String.valueOf(getTotaleRicavi()+" €");
-        }));
-    }
-
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -61,13 +39,13 @@ public class CiliegieController {
 
         ciliegiaTable.setItems(getCiliegiaData());
         ciliegiaTable.getSelectionModel().selectedItemProperty();
-        showSumRicavi(ricavoColumn);
+        ricavoTotaleLabel.textProperty().bind(Bindings.format("%.2f €", MenuApplication.getDatabase().getCiliegieRicavi()));
     }
 
 
     ObservableList<Ciliegia> getCiliegiaData(){
         ObservableList<Ciliegia> ciliegie = MenuApplication.getDatabase().getCiliegie(MenuApplication.getDatabase().getUsername_utente());
-        showSumRicavi(ricavoColumn);
+        ricavoTotaleLabel.textProperty().bind(Bindings.format("%.2f €", MenuApplication.getDatabase().getCiliegieRicavi()));
         return ciliegie;
     }
 
@@ -87,7 +65,7 @@ public class CiliegieController {
             DialogPane view = loader.load();
             CiliegieEditController controller = loader.getController();
 
-            controller.setCiliegia(new Ciliegia("", "" , "" ,""));
+            controller.setCiliegia(new Ciliegia("", 0.0 , "" ,0.0));
 
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Nuova Qualità");
@@ -96,15 +74,15 @@ public class CiliegieController {
 
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
-                if(!controller.getCiliegia().getQualita().equals("")  && !controller.getCiliegia().getKgVenduti().equals("")
-                && !controller.getCiliegia().getDescrizione().equals("") && !controller.getCiliegia().getRicavo().equals("")) {
+                if(!controller.getCiliegia().getQualita().equals("")  && controller.getCiliegia().getKgVenduti() > 0
+                && !controller.getCiliegia().getDescrizione().equals("") && controller.getCiliegia().getRicavo() > 0) {
 
                     MenuApplication.getDatabase().executeUpdate("INSERT INTO CILIEGIE(Qualità,Kg_Venduti,Descrizione,Ricavo,Username_utente) VALUES(?,?,?,?,?)",
                             controller.getCiliegia().getQualita(),controller.getCiliegia().getKgVenduti(),controller.getCiliegia().getDescrizione(),
                             controller.getCiliegia().getRicavo(),MenuApplication.getDatabase().getUsername_utente());
 
                     ciliegiaTable.setItems(getCiliegiaData());
-                    showSumRicavi(ricavoColumn);
+                    ricavoTotaleLabel.textProperty().bind(Bindings.format("%.2f €", MenuApplication.getDatabase().getCiliegieRicavi()));
                 }else{
                     Alert alert= new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Attenzione");
@@ -143,17 +121,17 @@ public class CiliegieController {
             TextField qualita = (TextField)dialogPane.lookup("#qualitaField");
             qualita.setText(selectedCiliegia.getQualita());
             TextField kgVenduti = (TextField)dialogPane.lookup("#kgVendutiField");
-            kgVenduti.setText(selectedCiliegia.getKgVenduti());
+            kgVenduti.setText(String.valueOf(selectedCiliegia.getKgVenduti()));
             TextField descrizione = (TextField)dialogPane.lookup("#descrizioneField");
             descrizione.setText(selectedCiliegia.getDescrizione());
             TextField ricavo = (TextField)dialogPane.lookup("#ricavoField");
-            ricavo.setText(selectedCiliegia.getRicavo());
+            ricavo.setText(String.valueOf(selectedCiliegia.getRicavo()));
 
             Optional<ButtonType> clickedButton = dialog.showAndWait();
 
             if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
-                if(!controller.getCiliegia().getQualita().equals("") && !controller.getCiliegia().getKgVenduti().equals("")
-                        && !controller.getCiliegia().getDescrizione().equals("") && !controller.getCiliegia().getRicavo().equals("")) {
+                if(!controller.getCiliegia().getQualita().equals("") && controller.getCiliegia().getKgVenduti() > 0
+                        && !controller.getCiliegia().getDescrizione().equals("") && controller.getCiliegia().getRicavo() > 0) {
 
                     MenuApplication.getDatabase().executeUpdate("DELETE FROM Ciliegie WHERE Qualità = ?",selectedCiliegia.getQualita());
                     MenuApplication.getDatabase().executeUpdate("INSERT INTO CILIEGIE(Qualità,Kg_Venduti,Descrizione,Ricavo,Username_utente) VALUES(?,?,?,?,?)",
@@ -162,7 +140,7 @@ public class CiliegieController {
 
                     ciliegiaTable.getItems().remove(selectedIndex);
                     ciliegiaTable.setItems(getCiliegiaData());
-                    showSumRicavi(ricavoColumn);
+                    ricavoTotaleLabel.textProperty().bind(Bindings.format("%.2f €", MenuApplication.getDatabase().getCiliegieRicavi()));
                 }else{
                     Alert alert= new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Attenzione");
@@ -186,7 +164,7 @@ public class CiliegieController {
         try {
             int selectedIndex = selectedIndex();
             showConfirmationAlert(selectedIndex);
-            showSumRicavi(ricavoColumn);
+            ricavoTotaleLabel.textProperty().bind(Bindings.format("%.2f €", MenuApplication.getDatabase().getCiliegieRicavi()));
         } catch (NoSuchElementException e) {
             showNoCiliegiaSelectedAlert();
         } catch (SQLException e) {
