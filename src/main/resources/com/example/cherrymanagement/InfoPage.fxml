@@ -138,6 +138,7 @@
             <Line endX="-100.0" endY="191.4000244140625" layoutX="400.0" layoutY="78.0" startX="-100.0" />
             <Line endX="-99.7928695678711" endY="190.5" layoutX="119.0" layoutY="78.0" startX="-100.0" />
             <Line endX="0.10003662109375" endY="1.5" layoutX="313.0" layoutY="75.0" startX="0.10003662109375" startY="194.20001220703125" />
+            <Button layoutX="25.0" layoutY="1461.0" mnemonicParsing="false" onAction="#deleteUtente" prefHeight="26.0" prefWidth="130.0" text="Delete Account" />
          </children></AnchorPane>
   </content>
 </ScrollPane>

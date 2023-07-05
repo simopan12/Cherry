@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
@@ -21,6 +22,7 @@ import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class Database {
@@ -404,4 +406,17 @@ public class Database {
         return ammontare;
     }
 
+    public void showConfirmationAlertUtente() throws SQLException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Conferma");
+        alert.setHeaderText("Sei sicuro di voler eliminare il tuo account?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            executeUpdate("DELETE FROM Ciliegie WHERE Username_utente = ?",username_utente);
+            executeUpdate("DELETE FROM Costi WHERE Username_utente = ?",username_utente);
+            executeUpdate("DELETE FROM Dipendenti WHERE Username_utente = ?",username_utente);
+            executeUpdate("DELETE FROM Utenti WHERE Username = ?",username_utente);
+            navigateToSignInPage();
+        }
+    }
 }
