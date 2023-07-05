@@ -10,6 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class InfoController {
@@ -64,6 +65,12 @@ public class InfoController {
             differenzaLabel.textProperty().set(-differenza+" €");
         }
     }
+
+    @FXML
+    public void deleteUtente() throws SQLException {
+        MenuApplication.getDatabase().showConfirmationAlertUtente();
+    }
+
 
     public void setStage(Stage stage) {
         this.stage = stage;

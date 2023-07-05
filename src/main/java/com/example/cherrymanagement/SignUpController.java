@@ -53,6 +53,7 @@ public class SignUpController {
 
     @FXML private void handleRegisterButtonAction() {
         MenuApplication.getDatabase().SignUp(getUsernameField(),getPasswordField(),getNomeUtenteField(),getCognomeUtenteField(),getAziendaField());
+
     }
 
     @FXML
