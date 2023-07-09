@@ -2,10 +2,11 @@ package com.example.cherrymanagement;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
+import java.util.Objects;
 
 public class DipendentiEditController {
     @FXML
@@ -15,6 +16,7 @@ public class DipendentiEditController {
     @FXML private TextField mansioneField;
     @FXML private  TextField pagaField;
     @FXML private Spinner<Double> oreSpinner;
+    @FXML private DialogPane dipendentiDialog;
 
 
     Dipendente dipendente;
@@ -32,14 +34,26 @@ public class DipendentiEditController {
             Platform.runLater(() -> {
                 if (containsLetters) {
                     showAlert();
-                    pagaField.textProperty().set("0");
+                    pagaField.textProperty().set("");
                 } else {
-                    dipendente.pagaProperty().set(Double.parseDouble(newValue));
+                    try {
+                        dipendente.pagaProperty().set(Double.parseDouble(newValue));
+                    } catch (NumberFormatException e) {
+                        pagaField.textProperty().set("");
+                    }
                 }
             });
         });
         oreSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 10000, 0, 1));
-        oreSpinner.valueProperty().addListener((observable, oldValue, newValue) -> dipendente.setOre(newValue.doubleValue()));
+        oreSpinner.valueProperty().addListener((observable, oldValue, newValue) -> dipendente.setOre(newValue));
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) dipendentiDialog.getScene().getWindow();
+            if (stage != null) {
+                Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image/cherryimage.jpg")));
+                stage.getIcons().add(icon);
+            }
+        });
 
     }
 
@@ -48,16 +62,6 @@ public class DipendentiEditController {
         alert.setTitle("Attenzione");
         alert.setHeaderText("Non puoi inserire delle lettere");
         alert.showAndWait();
-    }
-
-
-    void update() {
-        cfField.textProperty().set(dipendente.getCf());
-        nomeField.textProperty().set(dipendente.getNome());
-        cognomeField.textProperty().set(dipendente.getCognome());
-        mansioneField.textProperty().set(dipendente.getMansione());
-        pagaField.textProperty().set(String.valueOf(dipendente.getPaga()));
-        oreSpinner.setValueFactory( new SpinnerValueFactory.DoubleSpinnerValueFactory(0,10000,dipendente.getOre(),1));
     }
 
 

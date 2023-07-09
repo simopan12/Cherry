@@ -3,13 +3,19 @@ package com.example.cherrymanagement;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
+import java.util.Objects;
 
 public class CostiEditController {
 
     @FXML private TextField idField;
     @FXML private TextField tipoField;
     @FXML private TextField ammontareField;
+    @FXML private DialogPane costiDialog;
 
     Costo costo;
 
@@ -24,11 +30,23 @@ public class CostiEditController {
             Platform.runLater(() -> {
                 if (containsLetters) {
                     showAlert();
-                    ammontareField.textProperty().set("0");
+                    ammontareField.textProperty().set("");
                 } else {
-                    costo.ammontareProperty().set(Double.parseDouble(newValue));
+                    try {
+                        costo.ammontareProperty().set(Double.parseDouble(newValue));
+                    } catch (NumberFormatException e) {
+                        ammontareField.textProperty().set("");
+                    }
                 }
             });
+        });
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) costiDialog.getScene().getWindow();
+            if (stage != null) {
+                Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image/cherryimage.jpg")));
+                stage.getIcons().add(icon);
+            }
         });
     }
 
@@ -38,13 +56,6 @@ public class CostiEditController {
         alert.setTitle("Attenzione");
         alert.setHeaderText("Non puoi inserire delle lettere");
         alert.showAndWait();
-    }
-
-
-    void update() {
-        idField.textProperty().set(costo.getId());
-        tipoField.textProperty().set(costo.getTipo());
-        ammontareField.textProperty().set(String.valueOf(costo.getAmmontare()));
     }
 
 
