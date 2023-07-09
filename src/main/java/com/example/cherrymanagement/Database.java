@@ -1,20 +1,14 @@
 package com.example.cherrymanagement;
-import javafx.beans.property.SimpleListProperty;
+
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -26,9 +20,9 @@ import java.util.Optional;
 
 
 public class Database {
-    private String url;
-    private String username;
-    private String password;
+    private final String url;
+    private final String username;
+    private final String password;
     private Connection connection;
     private String username_utente;
 
@@ -103,14 +97,14 @@ public class Database {
         // Effettua la connessione al database
         try{
             // Verifica se l'utente esiste già
-            if (checkUserExists(connection, username)) {
+            if (checkUserExists(username)) {
                 showRegistrationError("L'utente esiste già.");
                 return;
             }
 
             // Esegui l'inserimento dell'utente nel database
             String query = "INSERT INTO Utenti (Username, Password, Nome_Utente, Cognome_Utente, Azienda) VALUES (?, ?, ?, ?, ?)";
-            int risultato = executeUpdate(query,username,password,nomeUtente,cognomeUtente,azienda);
+            executeUpdate(query,username,password,nomeUtente,cognomeUtente,azienda);
 
             // Registrazione riuscita
             showRegistrationSuccess();
@@ -155,7 +149,7 @@ public class Database {
     }
 
 
-    private boolean checkUserExists(Connection connection, String username) throws SQLException {
+    private boolean checkUserExists(String username) throws SQLException {
         String query = "SELECT * FROM Utenti WHERE Username = ?";
         ResultSet resultSet = executeQuery(query,username);
         return resultSet.next();
@@ -358,16 +352,14 @@ public class Database {
 
             Dipendente dipendente=null;
             ObservableList<Dipendente> pieChartData = FXCollections.observableArrayList();
-            if(resultSet.next()){
-                do {
-                    dipendente = new Dipendente(resultSet.getString("CF"),
-                            resultSet.getString("Nome"),
-                            resultSet.getString("Cognome"),
-                            resultSet.getString("Mansione"),
-                            resultSet.getDouble("Paga"),
-                            resultSet.getDouble("Ore"));
-                    pieChartData.add(dipendente);
-                }while (resultSet.next());
+            while(resultSet.next()){
+                dipendente = new Dipendente(resultSet.getString("CF"),
+                        resultSet.getString("Nome"),
+                        resultSet.getString("Cognome"),
+                        resultSet.getString("Mansione"),
+                        resultSet.getDouble("Paga"),
+                        resultSet.getDouble("Ore"));
+                pieChartData.add(dipendente);
             }
             resultSet.close();
             return pieChartData;

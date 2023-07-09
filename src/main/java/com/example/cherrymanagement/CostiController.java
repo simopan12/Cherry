@@ -1,7 +1,6 @@
 package com.example.cherrymanagement;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleBinding;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -181,6 +180,8 @@ public class CostiController {
             costoTable.getItems().remove(index);
         }
     }
+
+
     void showNoCostoSelectedAlert() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Nessuna selezione");

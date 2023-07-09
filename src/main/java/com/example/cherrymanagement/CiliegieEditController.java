@@ -3,7 +3,12 @@ package com.example.cherrymanagement;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
+import java.util.Objects;
 
 public class CiliegieEditController {
 
@@ -11,6 +16,7 @@ public class CiliegieEditController {
     @FXML private TextField kgVendutiField;
     @FXML private TextField descrizioneField;
     @FXML private TextField ricavoField;
+    @FXML private DialogPane ciliegieDialog;
     Ciliegia ciliegia;
 
 
@@ -26,7 +32,11 @@ public class CiliegieEditController {
                     showAlert();
                     kgVendutiField.textProperty().set("0");
                 } else {
-                    ciliegia.kgVendutiProperty().set(Double.parseDouble(newValue));
+                    try {
+                        ciliegia.kgVendutiProperty().set(Double.parseDouble(newValue));
+                    } catch (NumberFormatException e) {
+                        kgVendutiField.textProperty().set("0");
+                    }
                 }
             });
         });
@@ -38,11 +48,23 @@ public class CiliegieEditController {
             Platform.runLater(() -> {
                 if (containsLetters) {
                     showAlert();
-                    ricavoField.textProperty().set("0");
+                    ricavoField.textProperty().set("");
                 } else {
-                    ciliegia.ricavoProperty().set(Double.parseDouble(newValue));
+                    try {
+                        ciliegia.ricavoProperty().set(Double.parseDouble(newValue));
+                    } catch (NumberFormatException e) {
+                        ricavoField.textProperty().set("");
+                    }
                 }
             });
+        });
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) ciliegieDialog.getScene().getWindow();
+            if (stage != null) {
+                Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image/cherryimage.jpg")));
+                stage.getIcons().add(icon);
+            }
         });
     }
 
@@ -52,14 +74,6 @@ public class CiliegieEditController {
         alert.setTitle("Attenzione");
         alert.setHeaderText("Non puoi inserire delle lettere");
         alert.showAndWait();
-    }
-
-
-    void update() {
-        qualitaField.textProperty().set(ciliegia.getQualita());
-        kgVendutiField.textProperty().set(String.valueOf(ciliegia.getKgVenduti()));
-        descrizioneField.textProperty().set(ciliegia.getDescrizione());
-        ricavoField.textProperty().set(String.valueOf(ciliegia.getRicavo()));
     }
 
 
