@@ -148,13 +148,12 @@ public class CiliegieController {
                     handleEditCiliegia();
                 }
             }
-
-        } catch (NoSuchElementException e) {
-            showNoCiliegiaSelectedAlert();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }catch (NoSuchElementException e){
+            showNoCiliegiaSelectedAlert();
         }
     }
 
@@ -182,7 +181,7 @@ public class CiliegieController {
         }
     }
 
-    void showNoCiliegiaSelectedAlert() {
+    void showNoCiliegiaSelectedAlert(){
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Nessuna selezione");
         alert.setHeaderText("Nessuna qualità è stata selezionata");
